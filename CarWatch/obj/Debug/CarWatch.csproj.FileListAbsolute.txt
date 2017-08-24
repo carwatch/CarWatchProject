@@ -1,0 +1,158 @@
+c:\users\alon\documents\visual studio 2017\Projects\CarWatch\CarWatch\bin\ApplicationInsights.config
+c:\users\alon\documents\visual studio 2017\Projects\CarWatch\CarWatch\bin\roslyn\csc.exe
+c:\users\alon\documents\visual studio 2017\Projects\CarWatch\CarWatch\bin\roslyn\csc.exe.config
+c:\users\alon\documents\visual studio 2017\Projects\CarWatch\CarWatch\bin\roslyn\csc.rsp
+c:\users\alon\documents\visual studio 2017\Projects\CarWatch\CarWatch\bin\roslyn\csi.exe
+c:\users\alon\documents\visual studio 2017\Projects\CarWatch\CarWatch\bin\roslyn\csi.rsp
+c:\users\alon\documents\visual studio 2017\Projects\CarWatch\CarWatch\bin\roslyn\Microsoft.Build.Tasks.CodeAnalysis.dll
+c:\users\alon\documents\visual studio 2017\Projects\CarWatch\CarWatch\bin\roslyn\Microsoft.CodeAnalysis.CSharp.dll
+c:\users\alon\documents\visual studio 2017\Projects\CarWatch\CarWatch\bin\roslyn\Microsoft.CodeAnalysis.CSharp.Scripting.dll
+c:\users\alon\documents\visual studio 2017\Projects\CarWatch\CarWatch\bin\roslyn\Microsoft.CodeAnalysis.dll
+c:\users\alon\documents\visual studio 2017\Projects\CarWatch\CarWatch\bin\roslyn\Microsoft.CodeAnalysis.Scripting.dll
+c:\users\alon\documents\visual studio 2017\Projects\CarWatch\CarWatch\bin\roslyn\Microsoft.CodeAnalysis.VisualBasic.dll
+c:\users\alon\documents\visual studio 2017\Projects\CarWatch\CarWatch\bin\roslyn\Microsoft.CSharp.Core.targets
+c:\users\alon\documents\visual studio 2017\Projects\CarWatch\CarWatch\bin\roslyn\Microsoft.DiaSymReader.Native.amd64.dll
+c:\users\alon\documents\visual studio 2017\Projects\CarWatch\CarWatch\bin\roslyn\Microsoft.DiaSymReader.Native.x86.dll
+c:\users\alon\documents\visual studio 2017\Projects\CarWatch\CarWatch\bin\roslyn\Microsoft.VisualBasic.Core.targets
+c:\users\alon\documents\visual studio 2017\Projects\CarWatch\CarWatch\bin\roslyn\System.AppContext.dll
+c:\users\alon\documents\visual studio 2017\Projects\CarWatch\CarWatch\bin\roslyn\System.Collections.Immutable.dll
+c:\users\alon\documents\visual studio 2017\Projects\CarWatch\CarWatch\bin\roslyn\System.Diagnostics.StackTrace.dll
+c:\users\alon\documents\visual studio 2017\Projects\CarWatch\CarWatch\bin\roslyn\System.IO.FileSystem.dll
+c:\users\alon\documents\visual studio 2017\Projects\CarWatch\CarWatch\bin\roslyn\System.IO.FileSystem.Primitives.dll
+c:\users\alon\documents\visual studio 2017\Projects\CarWatch\CarWatch\bin\roslyn\System.Reflection.Metadata.dll
+c:\users\alon\documents\visual studio 2017\Projects\CarWatch\CarWatch\bin\roslyn\vbc.exe
+c:\users\alon\documents\visual studio 2017\Projects\CarWatch\CarWatch\bin\roslyn\vbc.exe.config
+c:\users\alon\documents\visual studio 2017\Projects\CarWatch\CarWatch\bin\roslyn\vbc.rsp
+c:\users\alon\documents\visual studio 2017\Projects\CarWatch\CarWatch\bin\roslyn\VBCSCompiler.exe
+c:\users\alon\documents\visual studio 2017\Projects\CarWatch\CarWatch\bin\roslyn\VBCSCompiler.exe.config
+c:\users\alon\documents\visual studio 2017\Projects\CarWatch\CarWatch\bin\CarWatch.dll.config
+c:\users\alon\documents\visual studio 2017\Projects\CarWatch\CarWatch\bin\CarWatch.dll
+c:\users\alon\documents\visual studio 2017\Projects\CarWatch\CarWatch\bin\CarWatch.pdb
+c:\users\alon\documents\visual studio 2017\Projects\CarWatch\CarWatch\bin\AccountDataAccess.dll
+c:\users\alon\documents\visual studio 2017\Projects\CarWatch\CarWatch\bin\Antlr3.Runtime.dll
+c:\users\alon\documents\visual studio 2017\Projects\CarWatch\CarWatch\bin\EntityFramework.dll
+c:\users\alon\documents\visual studio 2017\Projects\CarWatch\CarWatch\bin\EntityFramework.SqlServer.dll
+c:\users\alon\documents\visual studio 2017\Projects\CarWatch\CarWatch\bin\Microsoft.AI.Agent.Intercept.dll
+c:\users\alon\documents\visual studio 2017\Projects\CarWatch\CarWatch\bin\Microsoft.AI.DependencyCollector.dll
+c:\users\alon\documents\visual studio 2017\Projects\CarWatch\CarWatch\bin\Microsoft.AI.PerfCounterCollector.dll
+c:\users\alon\documents\visual studio 2017\Projects\CarWatch\CarWatch\bin\Microsoft.AI.ServerTelemetryChannel.dll
+c:\users\alon\documents\visual studio 2017\Projects\CarWatch\CarWatch\bin\Microsoft.AI.Web.dll
+c:\users\alon\documents\visual studio 2017\Projects\CarWatch\CarWatch\bin\Microsoft.AI.WindowsServer.dll
+c:\users\alon\documents\visual studio 2017\Projects\CarWatch\CarWatch\bin\Microsoft.ApplicationInsights.dll
+c:\users\alon\documents\visual studio 2017\Projects\CarWatch\CarWatch\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll
+c:\users\alon\documents\visual studio 2017\Projects\CarWatch\CarWatch\bin\Microsoft.Web.Infrastructure.dll
+c:\users\alon\documents\visual studio 2017\Projects\CarWatch\CarWatch\bin\Newtonsoft.Json.dll
+c:\users\alon\documents\visual studio 2017\Projects\CarWatch\CarWatch\bin\System.Net.Http.Formatting.dll
+c:\users\alon\documents\visual studio 2017\Projects\CarWatch\CarWatch\bin\System.Web.Helpers.dll
+c:\users\alon\documents\visual studio 2017\Projects\CarWatch\CarWatch\bin\System.Web.Http.dll
+c:\users\alon\documents\visual studio 2017\Projects\CarWatch\CarWatch\bin\System.Web.Http.WebHost.dll
+c:\users\alon\documents\visual studio 2017\Projects\CarWatch\CarWatch\bin\System.Web.Mvc.dll
+c:\users\alon\documents\visual studio 2017\Projects\CarWatch\CarWatch\bin\System.Web.Optimization.dll
+c:\users\alon\documents\visual studio 2017\Projects\CarWatch\CarWatch\bin\System.Web.Razor.dll
+c:\users\alon\documents\visual studio 2017\Projects\CarWatch\CarWatch\bin\System.Web.WebPages.Deployment.dll
+c:\users\alon\documents\visual studio 2017\Projects\CarWatch\CarWatch\bin\System.Web.WebPages.dll
+c:\users\alon\documents\visual studio 2017\Projects\CarWatch\CarWatch\bin\System.Web.WebPages.Razor.dll
+c:\users\alon\documents\visual studio 2017\Projects\CarWatch\CarWatch\bin\WebGrease.dll
+c:\users\alon\documents\visual studio 2017\Projects\CarWatch\CarWatch\bin\AccountDataAccess.pdb
+c:\users\alon\documents\visual studio 2017\Projects\CarWatch\CarWatch\bin\AccountDataAccess.dll.config
+c:\users\alon\documents\visual studio 2017\Projects\CarWatch\CarWatch\bin\EntityFramework.xml
+c:\users\alon\documents\visual studio 2017\Projects\CarWatch\CarWatch\bin\EntityFramework.SqlServer.xml
+c:\users\alon\documents\visual studio 2017\Projects\CarWatch\CarWatch\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.xml
+c:\users\alon\documents\visual studio 2017\Projects\CarWatch\CarWatch\bin\Newtonsoft.Json.xml
+c:\users\alon\documents\visual studio 2017\Projects\CarWatch\CarWatch\bin\System.Net.Http.Formatting.xml
+c:\users\alon\documents\visual studio 2017\Projects\CarWatch\CarWatch\bin\System.Web.Helpers.xml
+c:\users\alon\documents\visual studio 2017\Projects\CarWatch\CarWatch\bin\System.Web.Http.xml
+c:\users\alon\documents\visual studio 2017\Projects\CarWatch\CarWatch\bin\System.Web.Http.WebHost.xml
+c:\users\alon\documents\visual studio 2017\Projects\CarWatch\CarWatch\bin\System.Web.Mvc.xml
+c:\users\alon\documents\visual studio 2017\Projects\CarWatch\CarWatch\bin\System.Web.Optimization.xml
+c:\users\alon\documents\visual studio 2017\Projects\CarWatch\CarWatch\bin\System.Web.Razor.xml
+c:\users\alon\documents\visual studio 2017\Projects\CarWatch\CarWatch\bin\System.Web.WebPages.xml
+c:\users\alon\documents\visual studio 2017\Projects\CarWatch\CarWatch\bin\System.Web.WebPages.Deployment.xml
+c:\users\alon\documents\visual studio 2017\Projects\CarWatch\CarWatch\bin\System.Web.WebPages.Razor.xml
+c:\users\alon\documents\visual studio 2017\Projects\CarWatch\CarWatch\bin\Antlr3.Runtime.pdb
+c:\users\alon\documents\visual studio 2017\Projects\CarWatch\CarWatch\bin\Microsoft.ApplicationInsights.xml
+c:\users\alon\documents\visual studio 2017\Projects\CarWatch\CarWatch\bin\Microsoft.AI.DependencyCollector.xml
+c:\users\alon\documents\visual studio 2017\Projects\CarWatch\CarWatch\bin\Microsoft.AI.ServerTelemetryChannel.xml
+c:\users\alon\documents\visual studio 2017\Projects\CarWatch\CarWatch\bin\Microsoft.AI.WindowsServer.xml
+c:\users\alon\documents\visual studio 2017\Projects\CarWatch\CarWatch\bin\Microsoft.AI.Web.xml
+c:\users\alon\documents\visual studio 2017\Projects\CarWatch\CarWatch\obj\Debug\CarWatch.csprojResolveAssemblyReference.cache
+c:\users\alon\documents\visual studio 2017\Projects\CarWatch\CarWatch\obj\Debug\CarWatch.dll
+c:\users\alon\documents\visual studio 2017\Projects\CarWatch\CarWatch\obj\Debug\CarWatch.pdb
+C:\Users\alonh\Documents\GitHub\CarWatch\CarWatch\bin\ApplicationInsights.config
+C:\Users\alonh\Documents\GitHub\CarWatch\CarWatch\bin\roslyn\csc.exe
+C:\Users\alonh\Documents\GitHub\CarWatch\CarWatch\bin\roslyn\csc.exe.config
+C:\Users\alonh\Documents\GitHub\CarWatch\CarWatch\bin\roslyn\csc.rsp
+C:\Users\alonh\Documents\GitHub\CarWatch\CarWatch\bin\roslyn\csi.exe
+C:\Users\alonh\Documents\GitHub\CarWatch\CarWatch\bin\roslyn\csi.rsp
+C:\Users\alonh\Documents\GitHub\CarWatch\CarWatch\bin\roslyn\Microsoft.Build.Tasks.CodeAnalysis.dll
+C:\Users\alonh\Documents\GitHub\CarWatch\CarWatch\bin\roslyn\Microsoft.CodeAnalysis.CSharp.dll
+C:\Users\alonh\Documents\GitHub\CarWatch\CarWatch\bin\roslyn\Microsoft.CodeAnalysis.CSharp.Scripting.dll
+C:\Users\alonh\Documents\GitHub\CarWatch\CarWatch\bin\roslyn\Microsoft.CodeAnalysis.dll
+C:\Users\alonh\Documents\GitHub\CarWatch\CarWatch\bin\roslyn\Microsoft.CodeAnalysis.Scripting.dll
+C:\Users\alonh\Documents\GitHub\CarWatch\CarWatch\bin\roslyn\Microsoft.CodeAnalysis.VisualBasic.dll
+C:\Users\alonh\Documents\GitHub\CarWatch\CarWatch\bin\roslyn\Microsoft.CSharp.Core.targets
+C:\Users\alonh\Documents\GitHub\CarWatch\CarWatch\bin\roslyn\Microsoft.DiaSymReader.Native.amd64.dll
+C:\Users\alonh\Documents\GitHub\CarWatch\CarWatch\bin\roslyn\Microsoft.DiaSymReader.Native.x86.dll
+C:\Users\alonh\Documents\GitHub\CarWatch\CarWatch\bin\roslyn\Microsoft.VisualBasic.Core.targets
+C:\Users\alonh\Documents\GitHub\CarWatch\CarWatch\bin\roslyn\System.AppContext.dll
+C:\Users\alonh\Documents\GitHub\CarWatch\CarWatch\bin\roslyn\System.Collections.Immutable.dll
+C:\Users\alonh\Documents\GitHub\CarWatch\CarWatch\bin\roslyn\System.Diagnostics.StackTrace.dll
+C:\Users\alonh\Documents\GitHub\CarWatch\CarWatch\bin\roslyn\System.IO.FileSystem.dll
+C:\Users\alonh\Documents\GitHub\CarWatch\CarWatch\bin\roslyn\System.IO.FileSystem.Primitives.dll
+C:\Users\alonh\Documents\GitHub\CarWatch\CarWatch\bin\roslyn\System.Reflection.Metadata.dll
+C:\Users\alonh\Documents\GitHub\CarWatch\CarWatch\bin\roslyn\vbc.exe
+C:\Users\alonh\Documents\GitHub\CarWatch\CarWatch\bin\roslyn\vbc.exe.config
+C:\Users\alonh\Documents\GitHub\CarWatch\CarWatch\bin\roslyn\vbc.rsp
+C:\Users\alonh\Documents\GitHub\CarWatch\CarWatch\bin\roslyn\VBCSCompiler.exe
+C:\Users\alonh\Documents\GitHub\CarWatch\CarWatch\bin\roslyn\VBCSCompiler.exe.config
+C:\Users\alonh\Documents\GitHub\CarWatch\CarWatch\bin\CarWatch.dll.config
+C:\Users\alonh\Documents\GitHub\CarWatch\CarWatch\bin\CarWatch.dll
+C:\Users\alonh\Documents\GitHub\CarWatch\CarWatch\bin\CarWatch.pdb
+C:\Users\alonh\Documents\GitHub\CarWatch\CarWatch\bin\Antlr3.Runtime.dll
+C:\Users\alonh\Documents\GitHub\CarWatch\CarWatch\bin\DataAccess.dll
+C:\Users\alonh\Documents\GitHub\CarWatch\CarWatch\bin\Microsoft.AI.Agent.Intercept.dll
+C:\Users\alonh\Documents\GitHub\CarWatch\CarWatch\bin\Microsoft.AI.DependencyCollector.dll
+C:\Users\alonh\Documents\GitHub\CarWatch\CarWatch\bin\Microsoft.AI.PerfCounterCollector.dll
+C:\Users\alonh\Documents\GitHub\CarWatch\CarWatch\bin\Microsoft.AI.ServerTelemetryChannel.dll
+C:\Users\alonh\Documents\GitHub\CarWatch\CarWatch\bin\Microsoft.AI.Web.dll
+C:\Users\alonh\Documents\GitHub\CarWatch\CarWatch\bin\Microsoft.AI.WindowsServer.dll
+C:\Users\alonh\Documents\GitHub\CarWatch\CarWatch\bin\Microsoft.ApplicationInsights.dll
+C:\Users\alonh\Documents\GitHub\CarWatch\CarWatch\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll
+C:\Users\alonh\Documents\GitHub\CarWatch\CarWatch\bin\Microsoft.Web.Infrastructure.dll
+C:\Users\alonh\Documents\GitHub\CarWatch\CarWatch\bin\Newtonsoft.Json.dll
+C:\Users\alonh\Documents\GitHub\CarWatch\CarWatch\bin\System.Net.Http.Formatting.dll
+C:\Users\alonh\Documents\GitHub\CarWatch\CarWatch\bin\System.Web.Helpers.dll
+C:\Users\alonh\Documents\GitHub\CarWatch\CarWatch\bin\System.Web.Http.dll
+C:\Users\alonh\Documents\GitHub\CarWatch\CarWatch\bin\System.Web.Http.WebHost.dll
+C:\Users\alonh\Documents\GitHub\CarWatch\CarWatch\bin\System.Web.Mvc.dll
+C:\Users\alonh\Documents\GitHub\CarWatch\CarWatch\bin\System.Web.Optimization.dll
+C:\Users\alonh\Documents\GitHub\CarWatch\CarWatch\bin\System.Web.Razor.dll
+C:\Users\alonh\Documents\GitHub\CarWatch\CarWatch\bin\System.Web.WebPages.Deployment.dll
+C:\Users\alonh\Documents\GitHub\CarWatch\CarWatch\bin\System.Web.WebPages.dll
+C:\Users\alonh\Documents\GitHub\CarWatch\CarWatch\bin\System.Web.WebPages.Razor.dll
+C:\Users\alonh\Documents\GitHub\CarWatch\CarWatch\bin\WebGrease.dll
+C:\Users\alonh\Documents\GitHub\CarWatch\CarWatch\bin\DataAccess.pdb
+C:\Users\alonh\Documents\GitHub\CarWatch\CarWatch\bin\DataAccess.dll.config
+C:\Users\alonh\Documents\GitHub\CarWatch\CarWatch\bin\EntityFramework.xml
+C:\Users\alonh\Documents\GitHub\CarWatch\CarWatch\bin\EntityFramework.SqlServer.xml
+C:\Users\alonh\Documents\GitHub\CarWatch\CarWatch\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.xml
+C:\Users\alonh\Documents\GitHub\CarWatch\CarWatch\bin\Newtonsoft.Json.xml
+C:\Users\alonh\Documents\GitHub\CarWatch\CarWatch\bin\System.Net.Http.Formatting.xml
+C:\Users\alonh\Documents\GitHub\CarWatch\CarWatch\bin\System.Web.Helpers.xml
+C:\Users\alonh\Documents\GitHub\CarWatch\CarWatch\bin\System.Web.Http.xml
+C:\Users\alonh\Documents\GitHub\CarWatch\CarWatch\bin\System.Web.Http.WebHost.xml
+C:\Users\alonh\Documents\GitHub\CarWatch\CarWatch\bin\System.Web.Mvc.xml
+C:\Users\alonh\Documents\GitHub\CarWatch\CarWatch\bin\System.Web.Optimization.xml
+C:\Users\alonh\Documents\GitHub\CarWatch\CarWatch\bin\System.Web.Razor.xml
+C:\Users\alonh\Documents\GitHub\CarWatch\CarWatch\bin\System.Web.WebPages.xml
+C:\Users\alonh\Documents\GitHub\CarWatch\CarWatch\bin\System.Web.WebPages.Deployment.xml
+C:\Users\alonh\Documents\GitHub\CarWatch\CarWatch\bin\System.Web.WebPages.Razor.xml
+C:\Users\alonh\Documents\GitHub\CarWatch\CarWatch\bin\Antlr3.Runtime.pdb
+C:\Users\alonh\Documents\GitHub\CarWatch\CarWatch\bin\Microsoft.ApplicationInsights.xml
+C:\Users\alonh\Documents\GitHub\CarWatch\CarWatch\bin\Microsoft.AI.DependencyCollector.xml
+C:\Users\alonh\Documents\GitHub\CarWatch\CarWatch\bin\Microsoft.AI.ServerTelemetryChannel.xml
+C:\Users\alonh\Documents\GitHub\CarWatch\CarWatch\bin\Microsoft.AI.WindowsServer.xml
+C:\Users\alonh\Documents\GitHub\CarWatch\CarWatch\bin\Microsoft.AI.Web.xml
+C:\Users\alonh\Documents\GitHub\CarWatch\CarWatch\obj\Debug\CarWatch.csprojResolveAssemblyReference.cache
+C:\Users\alonh\Documents\GitHub\CarWatch\CarWatch\obj\Debug\CarWatch.dll
+C:\Users\alonh\Documents\GitHub\CarWatch\CarWatch\obj\Debug\CarWatch.pdb
