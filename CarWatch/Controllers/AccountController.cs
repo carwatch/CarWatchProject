@@ -38,18 +38,89 @@ namespace CarWatch.Controllers
                 var result = await entities.Accounts.AnyAsync(e => e.Email == i_Account.Email & e.Password == i_Account.Password);
                 if (result)
                 {
-                    return Ok(i_Account);
+                    return Ok();
                 }
 
                 return BadRequest("The username or password is incorrect.");
             }
         }
 
-        public static bool Authenticate(string i_Email, string i_Password)
+        public static bool Authenticate(string i_SID)
         {
             using (CarWatchDBEntities entities = new CarWatchDBEntities())
             {
-                return entities.Accounts.Any(user => user.Email == i_Email && user.Password == i_Password);
+                return entities.FacebookAccounts.Any(user => user.FacebookSID == i_SID);
+            }
+        }
+
+        [HttpPost]
+        public async Task<IHttpActionResult> LoginWithFacebook([FromBody] FacebookAccount i_Account)
+        {
+            using (CarWatchDBEntities entities = new CarWatchDBEntities())
+            {
+                var isExistSID = await entities.FacebookAccounts.AnyAsync(e => e.FacebookSID == i_Account.FacebookSID);
+                if (isExistSID)
+                {
+                    var result = await entities.FacebookAccounts.Where(e => e.FacebookSID == i_Account.FacebookSID).FirstOrDefaultAsync();
+                    return Ok(result.Nickname);
+                }
+                return Ok("Nickname is not set.");
+            }
+        }
+
+        [HttpPost]
+        public async Task<IHttpActionResult> SetNickname([FromBody] FacebookAccount i_Account)
+        {
+            using (CarWatchDBEntities entities = new CarWatchDBEntities())
+            {
+                var isExistNickname = await entities.FacebookAccounts.AnyAsync(e => e.Nickname == i_Account.Nickname);
+                if (isExistNickname)
+                {
+                    return BadRequest("This nickname is already is use.");
+                }
+
+                if (i_Account.LicensePlate != "")
+                {
+                    var isExistLicensePlate = await entities.FacebookAccounts.AnyAsync(e => e.LicensePlate == i_Account.LicensePlate);
+                    if (isExistLicensePlate)
+                    {
+                        return BadRequest("This license plate is already is use.");
+                    }
+                }
+
+                entities.FacebookAccounts.Add(i_Account);
+                await entities.SaveChangesAsync();
+                return Created("Created", i_Account);
+            }
+        }
+
+        [HttpPost]
+        public async Task<IHttpActionResult> GetSIDByNickname([FromBody] FacebookAccount i_Account)
+        {
+            using (CarWatchDBEntities entities = new CarWatchDBEntities())
+            {
+                var isExist = await entities.FacebookAccounts.AnyAsync(e => e.Nickname == i_Account.Nickname);
+                if (!isExist)
+                {
+                    return BadRequest("This nickname is not registered.");
+                }
+                var result = await entities.FacebookAccounts.Where(e => e.Nickname == i_Account.Nickname).FirstOrDefaultAsync();
+                return Ok(result.FacebookSID);
+            }
+        }
+
+        [HttpPost]
+        public async Task<IHttpActionResult> GetSIDByLicensePlate([FromBody] FacebookAccount i_Account)
+        {
+            using (CarWatchDBEntities entities = new CarWatchDBEntities())
+            {
+                var isExist = await entities.FacebookAccounts.AnyAsync(e => e.LicensePlate == i_Account.LicensePlate);
+                if (!isExist)
+                {
+                    return BadRequest("This license plate is not registered.");
+                }
+                var result = await entities.FacebookAccounts.Where(e => e.LicensePlate == i_Account.LicensePlate).FirstOrDefaultAsync();
+                return Ok(result.FacebookSID);
             }
         }
     }

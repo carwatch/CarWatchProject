@@ -15,8 +15,6 @@ namespace DataAccess
     public partial class Exchange
     {
         public int ID { get; set; }
-        public string ProviderEmail { get; set; }
-        public string ConsumerEmail { get; set; }
         public string ProviderLicensePlate { get; set; }
         public string ConsumerLicensePlate { get; set; }
         public string Location { get; set; }
@@ -30,5 +28,7 @@ namespace DataAccess
         public System.DateTime TimeMatched { get; set; }
         public System.DateTime TimeExchanged { get; set; }
         public int Status { get; set; }
+        public string ProviderNickname { get; set; }
+        public string ConsumerNickname { get; set; }
     }
 }

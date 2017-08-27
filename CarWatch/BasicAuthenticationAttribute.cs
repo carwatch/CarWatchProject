@@ -22,13 +22,13 @@ namespace CarWatch.Controllers
             {
                 string authenticationToken = actionContext.Request.Headers.Authorization.Parameter;
                 string decodedAuthenticationToken = Encoding.UTF8.GetString(Convert.FromBase64String(authenticationToken));
-                string[] usernamePasswordArray = decodedAuthenticationToken.Split(':');
-                string username = usernamePasswordArray[0];
-                string password = usernamePasswordArray[1];
+                string[] nicknameSIDArray = decodedAuthenticationToken.Split(':');
+                string nickname = nicknameSIDArray[0];
+                string SID = nicknameSIDArray[1];
 
-                if (AccountController.Authenticate(username, password))
+                if (AccountController.Authenticate(SID))
                 {
-                    Thread.CurrentPrincipal = new GenericPrincipal(new GenericIdentity(username), null);
+                    Thread.CurrentPrincipal = new GenericPrincipal(new GenericIdentity(nickname), null);
                 }
                 else
                 {

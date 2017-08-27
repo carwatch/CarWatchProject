@@ -15,16 +15,16 @@ namespace CarWatch.Controllers
     {
         public class MessageDetails
         {
-            public string SenderEmail { get; set; }
-            public string ReceiverEmail { get; set; }
+            public string SenderNickname { get; set; }
+            public string ReceiverNickname { get; set; }
         }
 
         [BasicAuthentication]
         [HttpPost]
         public async Task<IHttpActionResult> Send([FromBody] Message i_Message)
         {
-            string email = Thread.CurrentPrincipal.Identity.Name;
-            if (i_Message.SenderEmail != email)
+            string nickname = Thread.CurrentPrincipal.Identity.Name;
+            if (i_Message.SenderNickname != nickname)
             {
                 return BadRequest("Emails do not match.");
             }
@@ -41,16 +41,16 @@ namespace CarWatch.Controllers
         [HttpGet]
         public async Task<IHttpActionResult> GetMessagesHistory([FromBody] MessageDetails i_Message)
         {
-            string email = Thread.CurrentPrincipal.Identity.Name;
-            if (i_Message.SenderEmail != email)
+            string nickname = Thread.CurrentPrincipal.Identity.Name;
+            if (i_Message.SenderNickname != nickname)
             {
                 return BadRequest("Emails do not match.");
             }
 
             using (CarWatchDBEntities entities = new CarWatchDBEntities())
             {
-                var result = await entities.Messages.Where(e => (e.SenderEmail == i_Message.SenderEmail && e.ReceiverEmail == i_Message.ReceiverEmail) || (e.SenderEmail == i_Message.ReceiverEmail && e.ReceiverEmail == i_Message.SenderEmail)).ToListAsync();
-                return Ok();
+                var result = await entities.Messages.Where(e => (e.SenderNickname == i_Message.SenderNickname && e.ReceiverNickname == i_Message.ReceiverNickname) || (e.SenderNickname == i_Message.ReceiverNickname && e.ReceiverNickname == i_Message.SenderNickname)).ToListAsync();
+                return Ok(result);
             }
         }
 

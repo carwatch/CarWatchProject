@@ -30,9 +30,9 @@
     <Key>
       <PropertyRef Name="ID" />
     </Key>
-    <Property Name="ID" Type="int" Nullable="false" />
-    <Property Name="ProviderEmail" Type="nvarchar" MaxLength="50" Nullable="false" />
-    <Property Name="ConsumerEmail" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="ProviderNickname" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="ConsumerNickname" Type="nvarchar" MaxLength="50" Nullable="false" />
     <Property Name="ProviderLicensePlate" Type="nvarchar" MaxLength="15" Nullable="false" />
     <Property Name="ConsumerLicensePlate" Type="nvarchar" MaxLength="15" Nullable="false" />
     <Property Name="Location" Type="nvarchar" MaxLength="100" Nullable="false" />
@@ -47,14 +47,23 @@
     <Property Name="TimeExchanged" Type="datetime" Nullable="false" />
     <Property Name="Status" Type="int" Nullable="false" />
   </EntityType>
+  <EntityType Name="FacebookAccount">
+    <Key>
+      <PropertyRef Name="FacebookSID" />
+    </Key>
+    <Property Name="FacebookSID" Type="nvarchar" MaxLength="100" Nullable="false" />
+    <Property Name="Nickname" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="LicensePlate" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="Rank" Type="float" Nullable="false" />
+  </EntityType>
   <EntityType Name="Message">
     <Key>
-      <PropertyRef Name="SenderEmail" />
-      <PropertyRef Name="ReceiverEmail" />
+      <PropertyRef Name="SenderNickname" />
+      <PropertyRef Name="ReceiverNickname" />
       <PropertyRef Name="Time" />
     </Key>
-    <Property Name="SenderEmail" Type="nvarchar" MaxLength="50" Nullable="false" />
-    <Property Name="ReceiverEmail" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="SenderNickname" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="ReceiverNickname" Type="nvarchar" MaxLength="50" Nullable="false" />
     <Property Name="Time" Type="datetime" Nullable="false" />
     <Property Name="Content" Type="nvarchar" MaxLength="100" Nullable="false" />
   </EntityType>
@@ -62,8 +71,8 @@
     <Key>
       <PropertyRef Name="ID" />
     </Key>
-    <Property Name="ID" Type="int" Nullable="false" />
-    <Property Name="Email" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Nickname" Type="nvarchar" MaxLength="50" Nullable="false" />
     <Property Name="LicensePlate" Type="nvarchar" MaxLength="15" Nullable="false" />
     <Property Name="Location" Type="nvarchar" MaxLength="100" Nullable="false" />
     <Property Name="Longitude" Type="float" Nullable="false" />
@@ -78,8 +87,8 @@
     <Key>
       <PropertyRef Name="ID" />
     </Key>
-    <Property Name="ID" Type="int" Nullable="false" />
-    <Property Name="Email" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Nickname" Type="nvarchar" MaxLength="50" Nullable="false" />
     <Property Name="LicensePlate" Type="nvarchar" MaxLength="15" Nullable="false" />
     <Property Name="Location" Type="nvarchar" MaxLength="100" Nullable="false" />
     <Property Name="Longitude" Type="float" Nullable="false" />
@@ -95,6 +104,7 @@
     <EntitySet Name="Account" EntityType="Self.Account" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Car" EntityType="Self.Car" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Exchange" EntityType="Self.Exchange" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="FacebookAccount" EntityType="Self.FacebookAccount" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Message" EntityType="Self.Message" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Proposal" EntityType="Self.Proposal" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Search" EntityType="Self.Search" Schema="dbo" store:Type="Tables" />

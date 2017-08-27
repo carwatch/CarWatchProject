@@ -31,5 +31,6 @@ namespace DataAccess
         public virtual DbSet<Message> Messages { get; set; }
         public virtual DbSet<Proposal> Proposals { get; set; }
         public virtual DbSet<Search> Searches { get; set; }
+        public virtual DbSet<FacebookAccount> FacebookAccounts { get; set; }
     }
 }
