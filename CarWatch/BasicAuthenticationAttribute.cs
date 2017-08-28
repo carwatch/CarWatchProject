@@ -26,7 +26,7 @@ namespace CarWatch.Controllers
                 string nickname = nicknameSIDArray[0];
                 string SID = nicknameSIDArray[1];
 
-                if (AccountController.Authenticate(SID))
+                if (AccountController.Authenticate(nickname, SID))
                 {
                     Thread.CurrentPrincipal = new GenericPrincipal(new GenericIdentity(nickname), null);
                 }

@@ -45,11 +45,11 @@ namespace CarWatch.Controllers
             }
         }
 
-        public static bool Authenticate(string i_SID)
+        public static bool Authenticate(string i_Nickname, string i_SID)
         {
             using (CarWatchDBEntities entities = new CarWatchDBEntities())
             {
-                return entities.FacebookAccounts.Any(user => user.FacebookSID == i_SID);
+                return entities.FacebookAccounts.Any(user => user.Nickname == i_Nickname && user.FacebookSID == i_SID);
             }
         }
 
@@ -94,6 +94,7 @@ namespace CarWatch.Controllers
             }
         }
 
+        [BasicAuthentication]
         [HttpPost]
         public async Task<IHttpActionResult> GetSIDByNickname([FromBody] FacebookAccount i_Account)
         {
@@ -109,6 +110,7 @@ namespace CarWatch.Controllers
             }
         }
 
+        [BasicAuthentication]
         [HttpPost]
         public async Task<IHttpActionResult> GetSIDByLicensePlate([FromBody] FacebookAccount i_Account)
         {
