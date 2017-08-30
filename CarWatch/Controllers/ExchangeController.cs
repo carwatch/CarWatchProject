@@ -52,7 +52,6 @@ namespace CarWatch.Controllers
                 if (result == null)
                 {
                     return BadRequest("This nickname has not been searching for a parking spot.");
-
                 }
                 entities.Searches.Remove(result);
                 await entities.SaveChangesAsync();
@@ -75,18 +74,24 @@ namespace CarWatch.Controllers
                 DateTime timeout = DateTime.Now.AddSeconds(k_SearchingTime);
                 do
                 {
-                    var result = await entities.Searches.Where(
-                        e => 2 * k_EarthRadius * (SqlFunctions.SquareRoot(SqlFunctions.Square(SqlFunctions.Sin((SqlFunctions.Radians(i_ParkingSpotProposal.Latitude) - SqlFunctions.Radians(e.Latitude)) / 2)) + SqlFunctions.Cos(SqlFunctions.Radians(i_ParkingSpotProposal.Latitude)) * SqlFunctions.Cos(SqlFunctions.Radians(e.Latitude)) * SqlFunctions.Square(SqlFunctions.Sin((SqlFunctions.Radians(i_ParkingSpotProposal.Longitude) - SqlFunctions.Radians(e.Longitude)) / 2)))) <= e.Distance).Select(e => e.Nickname).ToListAsync();
-                    if (result.Count > 0)
+                    List<Search> searchList = await entities.Searches.Where(
+                        e => 2 * k_EarthRadius * (SqlFunctions.SquareRoot(SqlFunctions.Square(SqlFunctions.Sin((SqlFunctions.Radians(i_ParkingSpotProposal.Latitude) - SqlFunctions.Radians(e.Latitude)) / 2)) + SqlFunctions.Cos(SqlFunctions.Radians(i_ParkingSpotProposal.Latitude)) * SqlFunctions.Cos(SqlFunctions.Radians(e.Latitude)) * SqlFunctions.Square(SqlFunctions.Sin((SqlFunctions.Radians(i_ParkingSpotProposal.Longitude) - SqlFunctions.Radians(e.Longitude)) / 2)))) <= e.Distance).ToListAsync();
+                    if (searchList.Count > 0)
                     {
-                        var firstAccountNickname = result[0];
+                        var firstAccountNickname = searchList[0].Nickname;
                         var parkingSpotMatch = await entities.FacebookAccounts.FirstOrDefaultAsync(e => e.Nickname.CompareTo(firstAccountNickname) == 0);
-                        foreach (var item in result)
+                        Search searchToRemove = null;
+                        foreach (var item in searchList)
                         {
-                            var account = await entities.FacebookAccounts.FirstOrDefaultAsync(e => e.Nickname.CompareTo(item) == 0);
+                            var account = await entities.FacebookAccounts.FirstOrDefaultAsync(e => e.Nickname.CompareTo(item.Nickname) == 0);
                             if (account.Rank > parkingSpotMatch.Rank)
+                            {
                                 parkingSpotMatch = account;
+                                searchToRemove = item;
+                            }
                         }
+                        entities.Searches.Remove(searchToRemove);
+                        await entities.SaveChangesAsync();
                         return Ok(parkingSpotMatch);
                     }
                 }
@@ -124,15 +129,15 @@ namespace CarWatch.Controllers
             string nickname = Thread.CurrentPrincipal.Identity.Name;
             if (i_Transaction.ProviderNickname != nickname)
             {
-                return BadRequest("Emails do not match.");
+                return BadRequest("Nicknames do not match.");
             }
 
             using (CarWatchDBEntities entities = new CarWatchDBEntities())
             {
-                var account = await entities.FacebookAccounts.FirstOrDefaultAsync(e => e.Nickname == i_Transaction.ProviderNickname);
+                FacebookAccount account = await entities.FacebookAccounts.FirstOrDefaultAsync(e => e.Nickname == i_Transaction.ProviderNickname);
                 if (account == null)
                 {
-                    return BadRequest("Invalid email address.");
+                    return BadRequest("Invalid nickname.");
                 }
                 account.Rank++;
                 entities.Exchanges.Add(i_Transaction);
