@@ -26,7 +26,7 @@ namespace CarWatch.Controllers
             string nickname = Thread.CurrentPrincipal.Identity.Name;
             if (i_Message.SenderNickname != nickname)
             {
-                return BadRequest("Emails do not match.");
+                return BadRequest("Nicknames do not match.");
             }
 
             using (CarWatchDBEntities entities = new CarWatchDBEntities())
@@ -44,7 +44,7 @@ namespace CarWatch.Controllers
             string nickname = Thread.CurrentPrincipal.Identity.Name;
             if (i_Message.SenderNickname != nickname)
             {
-                return BadRequest("Emails do not match.");
+                return BadRequest("Nicknames do not match.");
             }
 
             using (CarWatchDBEntities entities = new CarWatchDBEntities())
@@ -61,7 +61,7 @@ namespace CarWatch.Controllers
             string nickname = Thread.CurrentPrincipal.Identity.Name;
             if (i_Message.SenderNickname != nickname)
             {
-                return BadRequest("Emails do not match.");
+                return BadRequest("Nicknames do not match.");
             }
 
             using (CarWatchDBEntities entities = new CarWatchDBEntities())

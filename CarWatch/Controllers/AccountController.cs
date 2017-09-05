@@ -64,7 +64,7 @@ namespace CarWatch.Controllers
                     var result = await entities.FacebookAccounts.Where(e => e.FacebookSID == i_Account.FacebookSID).FirstOrDefaultAsync();
                     return Ok(result.Nickname);
                 }
-                return Ok("Nickname is not set.");
+                return NotFound();
             }
         }
 
@@ -76,7 +76,7 @@ namespace CarWatch.Controllers
                 var isExistNickname = await entities.FacebookAccounts.AnyAsync(e => e.Nickname == i_Account.Nickname);
                 if (isExistNickname)
                 {
-                    return BadRequest("This nickname is already is use.");
+                    return BadRequest("nameinuse");
                 }
 
                 if (i_Account.LicensePlate != "")
@@ -84,13 +84,13 @@ namespace CarWatch.Controllers
                     var isExistLicensePlate = await entities.FacebookAccounts.AnyAsync(e => e.LicensePlate == i_Account.LicensePlate);
                     if (isExistLicensePlate)
                     {
-                        return BadRequest("This license plate is already is use.");
+                        return BadRequest("licenseinuse");
                     }
                 }
 
                 entities.FacebookAccounts.Add(i_Account);
                 await entities.SaveChangesAsync();
-                return Created("Created", i_Account);
+                return Ok();
             }
         }
 

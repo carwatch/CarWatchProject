@@ -16,7 +16,7 @@ namespace CarWatch.Controllers
     public class ExchangeController : ApiController
     {
         private int k_EarthRadius = 6371;
-        private int k_SearchingTime = 30; // seconds
+        private int k_SearchingTime = 300; // seconds
 
         [BasicAuthentication]
         [HttpPost]
@@ -37,13 +37,13 @@ namespace CarWatch.Controllers
                 }
                 entities.Searches.Add(i_ParkingSpotSearch);
                 await entities.SaveChangesAsync();
-                return Created("Search has started.", i_ParkingSpotSearch);
+                return Ok();
             }
         }
 
         [BasicAuthentication]
         [HttpPost]
-        public async Task<IHttpActionResult> RemoveSearch()
+        public async Task<IHttpActionResult> RemoveSearch(Object obj)
         {
             string nickname = Thread.CurrentPrincipal.Identity.Name;
             using (CarWatchDBEntities entities = new CarWatchDBEntities())
@@ -55,7 +55,7 @@ namespace CarWatch.Controllers
                 }
                 entities.Searches.Remove(result);
                 await entities.SaveChangesAsync();
-                return Ok("Search has been canceled.");
+                return Ok();
             }
         }
 
@@ -92,6 +92,7 @@ namespace CarWatch.Controllers
                         }
                         entities.Searches.Remove(searchToRemove);
                         await entities.SaveChangesAsync();
+                        parkingSpotMatch.FacebookSID = string.Empty;
                         return Ok(parkingSpotMatch);
                     }
                 }
@@ -103,7 +104,7 @@ namespace CarWatch.Controllers
 
         [BasicAuthentication]
         [HttpPost]
-        public async Task<IHttpActionResult> RemoveProposal()
+        public async Task<IHttpActionResult> RemoveProposal(Object obj)
         {
             string nickname = Thread.CurrentPrincipal.Identity.Name;
             using (CarWatchDBEntities entities = new CarWatchDBEntities())
@@ -116,18 +117,16 @@ namespace CarWatch.Controllers
                 }
                 entities.Proposals.Remove(result);
                 await entities.SaveChangesAsync();
-                return Ok("Proposal has been canceled.");
+                return Ok();
             }
         }
-
-
 
         [BasicAuthentication]
         [HttpPost]
         public async Task<IHttpActionResult> Exchange([FromBody] Exchange i_Transaction)
         {
             string nickname = Thread.CurrentPrincipal.Identity.Name;
-            if (i_Transaction.ProviderNickname != nickname)
+            if (i_Transaction.ConsumerNickname != nickname)
             {
                 return BadRequest("Nicknames do not match.");
             }
@@ -139,7 +138,11 @@ namespace CarWatch.Controllers
                 {
                     return BadRequest("Invalid nickname.");
                 }
-                account.Rank++;
+
+                // Exchange successful
+                if(i_Transaction.Status == 1)
+                    account.Rank++;
+
                 entities.Exchanges.Add(i_Transaction);
                 await entities.SaveChangesAsync();
                 return Ok();
