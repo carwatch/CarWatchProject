@@ -125,5 +125,23 @@ namespace CarWatch.Controllers
                 return Ok(result.FacebookSID);
             }
         }
+
+        [BasicAuthentication]
+        [HttpPost]
+        public async Task<IHttpActionResult> SetLicensePlateByNickname([FromBody] FacebookAccount i_Account)
+        {
+            using (CarWatchDBEntities entities = new CarWatchDBEntities())
+            {
+                var isExist = await entities.FacebookAccounts.AnyAsync(e => e.Nickname == i_Account.Nickname);
+                if (!isExist)
+                {
+                    return BadRequest("This nickname is not registered.");
+                }
+                var result = await entities.FacebookAccounts.Where(e => e.Nickname == i_Account.Nickname).FirstOrDefaultAsync();
+                result.LicensePlate = i_Account.LicensePlate;
+                await entities.SaveChangesAsync();
+                return Ok();
+            }
+        }
     }
 }
