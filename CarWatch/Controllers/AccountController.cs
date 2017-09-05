@@ -137,6 +137,11 @@ namespace CarWatch.Controllers
                 {
                     return BadRequest("This nickname is not registered.");
                 }
+                var isTaken = await entities.FacebookAccounts.AnyAsync(e => e.LicensePlate == i_Account.LicensePlate);
+                if (isTaken)
+                {
+                    return BadRequest("This license plate is already in use.");
+                }
                 var result = await entities.FacebookAccounts.Where(e => e.Nickname == i_Account.Nickname).FirstOrDefaultAsync();
                 result.LicensePlate = i_Account.LicensePlate;
                 await entities.SaveChangesAsync();
