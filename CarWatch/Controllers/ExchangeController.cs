@@ -71,6 +71,14 @@ namespace CarWatch.Controllers
 
             using (CarWatchDBEntities entities = new CarWatchDBEntities())
             {
+                var result = await entities.Proposals.FirstOrDefaultAsync(e => e.Nickname == nickname);
+                if (result != null)
+                {
+                    entities.Proposals.Remove(result);
+                }
+                entities.Proposals.Add(i_ParkingSpotProposal);
+                await entities.SaveChangesAsync();
+
                 DateTime timeout = DateTime.Now.AddSeconds(k_SearchingTime);
                 do
                 {
@@ -78,9 +86,9 @@ namespace CarWatch.Controllers
                         e => 2 * k_EarthRadius * (SqlFunctions.SquareRoot(SqlFunctions.Square(SqlFunctions.Sin((SqlFunctions.Radians(i_ParkingSpotProposal.Latitude) - SqlFunctions.Radians(e.Latitude)) / 2)) + SqlFunctions.Cos(SqlFunctions.Radians(i_ParkingSpotProposal.Latitude)) * SqlFunctions.Cos(SqlFunctions.Radians(e.Latitude)) * SqlFunctions.Square(SqlFunctions.Sin((SqlFunctions.Radians(i_ParkingSpotProposal.Longitude) - SqlFunctions.Radians(e.Longitude)) / 2)))) <= e.Distance).ToListAsync();
                     if (searchList.Count > 0)
                     {
+                        Search searchToRemove = searchList[0];
                         var firstAccountNickname = searchList[0].Nickname;
                         var parkingSpotMatch = await entities.FacebookAccounts.FirstOrDefaultAsync(e => e.Nickname.CompareTo(firstAccountNickname) == 0);
-                        Search searchToRemove = null;
                         foreach (var item in searchList)
                         {
                             var account = await entities.FacebookAccounts.FirstOrDefaultAsync(e => e.Nickname.CompareTo(item.Nickname) == 0);
@@ -90,14 +98,21 @@ namespace CarWatch.Controllers
                                 searchToRemove = item;
                             }
                         }
+                        var isAlive = await entities.Proposals.FirstOrDefaultAsync(e => e.Nickname == nickname);
+                        if (isAlive == null)
+                        {
+                            return BadRequest("This nickname has not been providing a parking spot.");
+                        }
                         entities.Searches.Remove(searchToRemove);
+                        entities.Proposals.Remove(i_ParkingSpotProposal);
                         await entities.SaveChangesAsync();
                         parkingSpotMatch.FacebookSID = string.Empty;
                         return Ok(parkingSpotMatch);
                     }
                 }
                 while (DateTime.Now <= timeout);
-
+                entities.Proposals.Remove(i_ParkingSpotProposal);
+                await entities.SaveChangesAsync();
                 return BadRequest("No match has been found.");
             }
         }
