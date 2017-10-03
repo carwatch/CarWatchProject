@@ -1,14 +1,14 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Schema Namespace="CarWatchDBModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012.Azure" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
-  <EntityType Name="Account">
+  <EntityType Name="__MigrationHistory">
     <Key>
-      <PropertyRef Name="Email" />
+      <PropertyRef Name="MigrationId" />
+      <PropertyRef Name="ContextKey" />
     </Key>
-    <Property Name="Email" Type="nvarchar" MaxLength="50" Nullable="false" />
-    <Property Name="Password" Type="nvarchar" MaxLength="50" Nullable="false" />
-    <Property Name="FirstName" Type="nvarchar" MaxLength="50" Nullable="false" />
-    <Property Name="LastName" Type="nvarchar" MaxLength="50" Nullable="false" />
-    <Property Name="Rank" Type="float" Nullable="false" />
+    <Property Name="MigrationId" Type="nvarchar" MaxLength="150" Nullable="false" />
+    <Property Name="ContextKey" Type="nvarchar" MaxLength="300" Nullable="false" />
+    <Property Name="Model" Type="varbinary(max)" Nullable="false" />
+    <Property Name="ProductVersion" Type="nvarchar" MaxLength="32" Nullable="false" />
   </EntityType>
   <EntityType Name="Car">
     <Key>
@@ -53,7 +53,7 @@
     </Key>
     <Property Name="FacebookSID" Type="nvarchar" MaxLength="100" Nullable="false" />
     <Property Name="Nickname" Type="nvarchar" MaxLength="50" Nullable="false" />
-    <Property Name="LicensePlate" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="LicensePlate" Type="nvarchar" MaxLength="50" />
     <Property Name="Rank" Type="float" Nullable="false" />
   </EntityType>
   <EntityType Name="Message">
@@ -101,7 +101,7 @@
     <Property Name="Distance" Type="int" Nullable="false" />
   </EntityType>
   <EntityContainer Name="CarWatchDBModelStoreContainer">
-    <EntitySet Name="Account" EntityType="Self.Account" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="__MigrationHistory" EntityType="Self.__MigrationHistory" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Car" EntityType="Self.Car" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Exchange" EntityType="Self.Exchange" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="FacebookAccount" EntityType="Self.FacebookAccount" Schema="dbo" store:Type="Tables" />

@@ -25,12 +25,12 @@ namespace DataAccess
             throw new UnintentionalCodeFirstException();
         }
     
-        public virtual DbSet<Account> Accounts { get; set; }
+        public virtual DbSet<C__MigrationHistory> C__MigrationHistory { get; set; }
         public virtual DbSet<Car> Cars { get; set; }
         public virtual DbSet<Exchange> Exchanges { get; set; }
+        public virtual DbSet<FacebookAccount> FacebookAccounts { get; set; }
         public virtual DbSet<Message> Messages { get; set; }
         public virtual DbSet<Proposal> Proposals { get; set; }
         public virtual DbSet<Search> Searches { get; set; }
-        public virtual DbSet<FacebookAccount> FacebookAccounts { get; set; }
     }
 }

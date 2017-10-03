@@ -12,12 +12,11 @@ namespace DataAccess
     using System;
     using System.Collections.Generic;
     
-    public partial class Account
+    public partial class C__MigrationHistory
     {
-        public string Email { get; set; }
-        public string Password { get; set; }
-        public string FirstName { get; set; }
-        public string LastName { get; set; }
-        public double Rank { get; set; }
+        public string MigrationId { get; set; }
+        public string ContextKey { get; set; }
+        public byte[] Model { get; set; }
+        public string ProductVersion { get; set; }
     }
 }

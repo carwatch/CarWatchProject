@@ -4,16 +4,16 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-    <Schema Namespace="CarWatchDBModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012.Azure" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
-        <EntityType Name="Account">
+      <Schema Namespace="CarWatchDBModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012.Azure" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="__MigrationHistory">
           <Key>
-            <PropertyRef Name="Email" />
+            <PropertyRef Name="MigrationId" />
+            <PropertyRef Name="ContextKey" />
           </Key>
-          <Property Name="Email" Type="nvarchar" MaxLength="50" Nullable="false" />
-          <Property Name="Password" Type="nvarchar" MaxLength="50" Nullable="false" />
-          <Property Name="FirstName" Type="nvarchar" MaxLength="50" Nullable="false" />
-          <Property Name="LastName" Type="nvarchar" MaxLength="50" Nullable="false" />
-          <Property Name="Rank" Type="float" Nullable="false" />
+          <Property Name="MigrationId" Type="nvarchar" MaxLength="150" Nullable="false" />
+          <Property Name="ContextKey" Type="nvarchar" MaxLength="300" Nullable="false" />
+          <Property Name="Model" Type="varbinary(max)" Nullable="false" />
+          <Property Name="ProductVersion" Type="nvarchar" MaxLength="32" Nullable="false" />
         </EntityType>
         <EntityType Name="Car">
           <Key>
@@ -58,7 +58,7 @@
           </Key>
           <Property Name="FacebookSID" Type="nvarchar" MaxLength="100" Nullable="false" />
           <Property Name="Nickname" Type="nvarchar" MaxLength="50" Nullable="false" />
-          <Property Name="LicensePlate" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="LicensePlate" Type="nvarchar" MaxLength="50" />
           <Property Name="Rank" Type="float" Nullable="false" />
         </EntityType>
         <EntityType Name="Message">
@@ -106,7 +106,7 @@
           <Property Name="Distance" Type="int" Nullable="false" />
         </EntityType>
         <EntityContainer Name="CarWatchDBModelStoreContainer">
-          <EntitySet Name="Account" EntityType="Self.Account" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="__MigrationHistory" EntityType="Self.__MigrationHistory" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Car" EntityType="Self.Car" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Exchange" EntityType="Self.Exchange" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="FacebookAccount" EntityType="Self.FacebookAccount" Schema="dbo" store:Type="Tables" />
@@ -114,19 +114,20 @@
           <EntitySet Name="Proposal" EntityType="Self.Proposal" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Search" EntityType="Self.Search" Schema="dbo" store:Type="Tables" />
         </EntityContainer>
-      </Schema></edmx:StorageModels>
+      </Schema>
+    </edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="CarWatchDBModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
-        <EntityType Name="Account">
+        <EntityType Name="C__MigrationHistory">
           <Key>
-            <PropertyRef Name="Email" />
+            <PropertyRef Name="MigrationId" />
+            <PropertyRef Name="ContextKey" />
           </Key>
-          <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="Password" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="FirstName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="LastName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="Rank" Type="Double" Nullable="false" />
+          <Property Name="MigrationId" Type="String" MaxLength="150" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="ContextKey" Type="String" MaxLength="300" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Model" Type="Binary" MaxLength="Max" FixedLength="false" Nullable="false" />
+          <Property Name="ProductVersion" Type="String" MaxLength="32" FixedLength="false" Unicode="true" Nullable="false" />
         </EntityType>
         <EntityType Name="Car">
           <Key>
@@ -148,7 +149,9 @@
           <Key>
             <PropertyRef Name="ID" />
           </Key>
-          <Property Name="ID" Type="Int32" Nullable="false" />
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ProviderNickname" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="ConsumerNickname" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="ProviderLicensePlate" Type="String" MaxLength="15" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="ConsumerLicensePlate" Type="String" MaxLength="15" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="Location" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
@@ -162,25 +165,33 @@
           <Property Name="TimeMatched" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="TimeExchanged" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="Status" Type="Int32" Nullable="false" />
-          <Property Name="ProviderNickname" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="ConsumerNickname" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="FacebookAccount">
+          <Key>
+            <PropertyRef Name="FacebookSID" />
+          </Key>
+          <Property Name="FacebookSID" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Nickname" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="LicensePlate" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Rank" Type="Double" Nullable="false" />
         </EntityType>
         <EntityType Name="Message">
           <Key>
-            <PropertyRef Name="Time" />
             <PropertyRef Name="SenderNickname" />
             <PropertyRef Name="ReceiverNickname" />
+            <PropertyRef Name="Time" />
           </Key>
+          <Property Name="SenderNickname" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="ReceiverNickname" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="Time" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="Content" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="SenderNickname" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="ReceiverNickname" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="Proposal">
           <Key>
             <PropertyRef Name="ID" />
           </Key>
-          <Property Name="ID" Type="Int32" Nullable="false" />
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Nickname" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="LicensePlate" Type="String" MaxLength="15" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="Location" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="Longitude" Type="Double" Nullable="false" />
@@ -190,13 +201,13 @@
           <Property Name="Street" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="StreetNumber" Type="Int32" Nullable="false" />
           <Property Name="TimeOpened" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="Nickname" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="Search">
           <Key>
             <PropertyRef Name="ID" />
           </Key>
-          <Property Name="ID" Type="Int32" Nullable="false" />
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Nickname" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="LicensePlate" Type="String" MaxLength="15" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="Location" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="Longitude" Type="Double" Nullable="false" />
@@ -207,40 +218,29 @@
           <Property Name="StreetNumber" Type="Int32" Nullable="false" />
           <Property Name="TimeOpened" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="Distance" Type="Int32" Nullable="false" />
-          <Property Name="Nickname" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityContainer Name="CarWatchDBEntities" annotation:LazyLoadingEnabled="true">
-          <EntitySet Name="Accounts" EntityType="Self.Account" />
+          <EntitySet Name="C__MigrationHistory" EntityType="Self.C__MigrationHistory" />
           <EntitySet Name="Cars" EntityType="Self.Car" />
           <EntitySet Name="Exchanges" EntityType="Self.Exchange" />
+          <EntitySet Name="FacebookAccounts" EntityType="Self.FacebookAccount" />
           <EntitySet Name="Messages" EntityType="Self.Message" />
           <EntitySet Name="Proposals" EntityType="Self.Proposal" />
           <EntitySet Name="Searches" EntityType="Self.Search" />
-          <EntitySet Name="FacebookAccounts" EntityType="CarWatchDBModel.FacebookAccount" />
         </EntityContainer>
-        <EntityType Name="FacebookAccount">
-          <Key>
-            <PropertyRef Name="FacebookSID" />
-          </Key>
-          <Property Name="FacebookSID" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="Nickname" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="LicensePlate" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Rank" Type="Double" Nullable="false" />
-        </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
         <EntityContainerMapping StorageEntityContainer="CarWatchDBModelStoreContainer" CdmEntityContainer="CarWatchDBEntities">
-          <EntitySetMapping Name="Accounts">
-            <EntityTypeMapping TypeName="CarWatchDBModel.Account">
-              <MappingFragment StoreEntitySet="Account">
-                <ScalarProperty Name="Email" ColumnName="Email" />
-                <ScalarProperty Name="Password" ColumnName="Password" />
-                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
-                <ScalarProperty Name="LastName" ColumnName="LastName" />
-                <ScalarProperty Name="Rank" ColumnName="Rank" />
+          <EntitySetMapping Name="C__MigrationHistory">
+            <EntityTypeMapping TypeName="CarWatchDBModel.C__MigrationHistory">
+              <MappingFragment StoreEntitySet="__MigrationHistory">
+                <ScalarProperty Name="MigrationId" ColumnName="MigrationId" />
+                <ScalarProperty Name="ContextKey" ColumnName="ContextKey" />
+                <ScalarProperty Name="Model" ColumnName="Model" />
+                <ScalarProperty Name="ProductVersion" ColumnName="ProductVersion" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -263,9 +263,9 @@
           <EntitySetMapping Name="Exchanges">
             <EntityTypeMapping TypeName="CarWatchDBModel.Exchange">
               <MappingFragment StoreEntitySet="Exchange">
-                <ScalarProperty Name="ConsumerNickname" ColumnName="ConsumerNickname" />
-                <ScalarProperty Name="ProviderNickname" ColumnName="ProviderNickname" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="ProviderNickname" ColumnName="ProviderNickname" />
+                <ScalarProperty Name="ConsumerNickname" ColumnName="ConsumerNickname" />
                 <ScalarProperty Name="ProviderLicensePlate" ColumnName="ProviderLicensePlate" />
                 <ScalarProperty Name="ConsumerLicensePlate" ColumnName="ConsumerLicensePlate" />
                 <ScalarProperty Name="Location" ColumnName="Location" />
@@ -282,11 +282,21 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="FacebookAccounts">
+            <EntityTypeMapping TypeName="CarWatchDBModel.FacebookAccount">
+              <MappingFragment StoreEntitySet="FacebookAccount">
+                <ScalarProperty Name="FacebookSID" ColumnName="FacebookSID" />
+                <ScalarProperty Name="Nickname" ColumnName="Nickname" />
+                <ScalarProperty Name="LicensePlate" ColumnName="LicensePlate" />
+                <ScalarProperty Name="Rank" ColumnName="Rank" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="Messages">
             <EntityTypeMapping TypeName="CarWatchDBModel.Message">
               <MappingFragment StoreEntitySet="Message">
-                <ScalarProperty Name="ReceiverNickname" ColumnName="ReceiverNickname" />
                 <ScalarProperty Name="SenderNickname" ColumnName="SenderNickname" />
+                <ScalarProperty Name="ReceiverNickname" ColumnName="ReceiverNickname" />
                 <ScalarProperty Name="Time" ColumnName="Time" />
                 <ScalarProperty Name="Content" ColumnName="Content" />
               </MappingFragment>
@@ -295,8 +305,8 @@
           <EntitySetMapping Name="Proposals">
             <EntityTypeMapping TypeName="CarWatchDBModel.Proposal">
               <MappingFragment StoreEntitySet="Proposal">
-                <ScalarProperty Name="Nickname" ColumnName="Nickname" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Nickname" ColumnName="Nickname" />
                 <ScalarProperty Name="LicensePlate" ColumnName="LicensePlate" />
                 <ScalarProperty Name="Location" ColumnName="Location" />
                 <ScalarProperty Name="Longitude" ColumnName="Longitude" />
@@ -312,8 +322,8 @@
           <EntitySetMapping Name="Searches">
             <EntityTypeMapping TypeName="CarWatchDBModel.Search">
               <MappingFragment StoreEntitySet="Search">
-                <ScalarProperty Name="Nickname" ColumnName="Nickname" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Nickname" ColumnName="Nickname" />
                 <ScalarProperty Name="LicensePlate" ColumnName="LicensePlate" />
                 <ScalarProperty Name="Location" ColumnName="Location" />
                 <ScalarProperty Name="Longitude" ColumnName="Longitude" />
@@ -324,16 +334,6 @@
                 <ScalarProperty Name="StreetNumber" ColumnName="StreetNumber" />
                 <ScalarProperty Name="TimeOpened" ColumnName="TimeOpened" />
                 <ScalarProperty Name="Distance" ColumnName="Distance" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="FacebookAccounts">
-            <EntityTypeMapping TypeName="CarWatchDBModel.FacebookAccount">
-              <MappingFragment StoreEntitySet="FacebookAccount">
-                <ScalarProperty Name="Rank" ColumnName="Rank" />
-                <ScalarProperty Name="LicensePlate" ColumnName="LicensePlate" />
-                <ScalarProperty Name="Nickname" ColumnName="Nickname" />
-                <ScalarProperty Name="FacebookSID" ColumnName="FacebookSID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

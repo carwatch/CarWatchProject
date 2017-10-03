@@ -12,7 +12,7 @@ namespace CarWatch.Controllers
 {
     public class AccountController : ApiController
     {
-        [HttpPost]
+        /*[HttpPost]
         public async Task<IHttpActionResult> Register([FromBody] Account i_Account)
         {
             using (CarWatchDBEntities entities = new CarWatchDBEntities())
@@ -43,7 +43,7 @@ namespace CarWatch.Controllers
 
                 return BadRequest("The username or password is incorrect.");
             }
-        }
+        }*/
 
         public static bool Authenticate(string i_Nickname, string i_SID)
         {
@@ -79,7 +79,7 @@ namespace CarWatch.Controllers
                     return BadRequest("nameinuse");
                 }
 
-                if (i_Account.LicensePlate != "")
+                if (i_Account.LicensePlate != null)
                 {
                     var isExistLicensePlate = await entities.FacebookAccounts.AnyAsync(e => e.LicensePlate == i_Account.LicensePlate);
                     if (isExistLicensePlate)
