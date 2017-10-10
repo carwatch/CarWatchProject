@@ -16,7 +16,12 @@ namespace CarWatch.Controllers
     public class ExchangeController : ApiController
     {
         private int k_EarthRadius = 6371;
-        private int k_SearchingTime = 300; // seconds
+        private int k_SearchingTime = 600; // seconds
+
+        public class ExchangeStatus
+        {
+            public int status { get; set; }
+        }
 
         [BasicAuthentication]
         [HttpPost]
@@ -35,6 +40,7 @@ namespace CarWatch.Controllers
                 {
                     entities.Searches.Remove(result);
                 }
+                i_ParkingSpotSearch.TimeOpened = DateTime.Now;
                 entities.Searches.Add(i_ParkingSpotSearch);
                 await entities.SaveChangesAsync();
                 return Ok();
@@ -61,6 +67,18 @@ namespace CarWatch.Controllers
 
         [BasicAuthentication]
         [HttpPost]
+        public async Task<IHttpActionResult> CheckSearch(Object obj)
+        {
+            string nickname = Thread.CurrentPrincipal.Identity.Name;
+            using (CarWatchDBEntities entities = new CarWatchDBEntities())
+            {
+                var result = await entities.Searches.FirstOrDefaultAsync(e => e.Nickname == nickname);
+                return Ok(result);
+            }
+        }
+
+        [BasicAuthentication]
+        [HttpPost]
         public async Task<IHttpActionResult> AddProposal([FromBody] Proposal i_ParkingSpotProposal)
         {
             string nickname = Thread.CurrentPrincipal.Identity.Name;
@@ -76,6 +94,7 @@ namespace CarWatch.Controllers
                 {
                     entities.Proposals.Remove(result);
                 }
+                i_ParkingSpotProposal.TimeOpened = DateTime.Now;
                 entities.Proposals.Add(i_ParkingSpotProposal);
                 await entities.SaveChangesAsync();
 
@@ -103,6 +122,8 @@ namespace CarWatch.Controllers
                         {
                             return BadRequest("This nickname has not been providing a parking spot.");
                         }
+                        Exchange exchange =  createExchangeObject(searchToRemove, i_ParkingSpotProposal);
+                        entities.Exchanges.Add(exchange);
                         entities.Searches.Remove(searchToRemove);
                         entities.Proposals.Remove(i_ParkingSpotProposal);
                         await entities.SaveChangesAsync();
@@ -138,6 +159,18 @@ namespace CarWatch.Controllers
 
         [BasicAuthentication]
         [HttpPost]
+        public async Task<IHttpActionResult> CheckProposal(Object obj)
+        {
+            string nickname = Thread.CurrentPrincipal.Identity.Name;
+            using (CarWatchDBEntities entities = new CarWatchDBEntities())
+            {
+                var result = await entities.Proposals.FirstOrDefaultAsync(e => e.Nickname == nickname);
+                return Ok(result);
+            }
+        }
+
+        /*[BasicAuthentication]
+        [HttpPost]
         public async Task<IHttpActionResult> Exchange([FromBody] Exchange i_Transaction)
         {
             string nickname = Thread.CurrentPrincipal.Identity.Name;
@@ -158,9 +191,64 @@ namespace CarWatch.Controllers
                 if(i_Transaction.Status == 1)
                     account.Rank++;
 
+                i_Transaction.TimeExchanged = DateTime.Now;
                 entities.Exchanges.Add(i_Transaction);
                 await entities.SaveChangesAsync();
                 return Ok();
+            }
+        }*/
+
+        private Exchange createExchangeObject(Search i_Search, Proposal i_Proposal)
+        {
+            Exchange exchange = new Exchange();
+            exchange.ProviderNickname = i_Proposal.Nickname;
+            exchange.ConsumerNickname = i_Search.Nickname;
+            exchange.ProviderLicensePlate = i_Proposal.LicensePlate;
+            exchange.ConsumerLicensePlate = i_Search.LicensePlate;
+            exchange.Location = i_Proposal.Location;
+            exchange.Longitude = i_Proposal.Longitude;
+            exchange.Latitude = i_Proposal.Latitude;
+            exchange.Country = i_Proposal.Country;
+            exchange.City = i_Proposal.City;
+            exchange.Street = i_Proposal.Street;
+            exchange.StreetNumber = i_Proposal.StreetNumber;
+            exchange.TimeOpened = i_Search.TimeOpened;
+            exchange.TimeMatched = DateTime.Now;
+            exchange.TimeExchanged = DateTime.Now;
+            exchange.Status = 0;
+            return exchange;
+        }
+
+        [BasicAuthentication]
+        [HttpPost]
+        public async Task<IHttpActionResult> UpdateExchangeStatus([FromBody] ExchangeStatus i_Status)
+        {
+            string nickname = Thread.CurrentPrincipal.Identity.Name;
+            using (CarWatchDBEntities entities = new CarWatchDBEntities())
+            {
+                var result = await entities.Exchanges.FirstOrDefaultAsync(e => e.ConsumerNickname == nickname && e.Status == 0);
+                if(result == null)
+                {
+                    return BadRequest("you are not involved with an open exchange");
+                }
+                entities.Exchanges.Remove(result);
+                result.Status = i_Status.status;
+                result.TimeExchanged = DateTime.Now;
+                entities.Exchanges.Add(result);
+                await entities.SaveChangesAsync();
+                return Ok(result);
+            }
+        }
+
+        [BasicAuthentication]
+        [HttpPost]
+        public async Task<IHttpActionResult> CheckExchange(Object obj)
+        {
+            string nickname = Thread.CurrentPrincipal.Identity.Name;
+            using (CarWatchDBEntities entities = new CarWatchDBEntities())
+            {
+                var result = await entities.Exchanges.FirstOrDefaultAsync(e => (e.ConsumerNickname == nickname || e.ProviderNickname == nickname) && e.Status == 0);
+                return Ok(result);
             }
         }
     }

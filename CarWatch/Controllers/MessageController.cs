@@ -8,11 +8,13 @@ using System.Web.Http;
 using DataAccess;
 using System.Data.Entity;
 using System.Threading;
+using System.Net.Http.Headers;
 
 namespace CarWatch.Controllers
 {
     public class MessageController : ApiController
     {
+        private HttpClient client = new HttpClient();
         public class MessageDetails
         {
             public string SenderNickname { get; set; }
@@ -31,6 +33,7 @@ namespace CarWatch.Controllers
 
             using (CarWatchDBEntities entities = new CarWatchDBEntities())
             {
+                i_Message.Time = DateTime.Now;
                 entities.Messages.Add(i_Message);
                 await entities.SaveChangesAsync();
                 return Ok();

@@ -12,39 +12,6 @@ namespace CarWatch.Controllers
 {
     public class AccountController : ApiController
     {
-        /*[HttpPost]
-        public async Task<IHttpActionResult> Register([FromBody] Account i_Account)
-        {
-            using (CarWatchDBEntities entities = new CarWatchDBEntities())
-            {
-                var account = await entities.Accounts.FindAsync(i_Account.Email);
-                if (account != null)
-                {
-                    return BadRequest("Email is already in use.");
-                }
-
-                i_Account.Rank = 0;
-                entities.Accounts.Add(i_Account);
-                await entities.SaveChangesAsync();
-                return Ok();
-            }
-        }
-
-        [HttpPost]
-        public async Task<IHttpActionResult> Login([FromBody] Account i_Account)
-        {
-            using (CarWatchDBEntities entities = new CarWatchDBEntities())
-            {
-                var result = await entities.Accounts.AnyAsync(e => e.Email == i_Account.Email & e.Password == i_Account.Password);
-                if (result)
-                {
-                    return Ok();
-                }
-
-                return BadRequest("The username or password is incorrect.");
-            }
-        }*/
-
         public static bool Authenticate(string i_Nickname, string i_SID)
         {
             using (CarWatchDBEntities entities = new CarWatchDBEntities())
@@ -61,15 +28,15 @@ namespace CarWatch.Controllers
                 var isExistSID = await entities.FacebookAccounts.AnyAsync(e => e.FacebookSID == i_Account.FacebookSID);
                 if (isExistSID)
                 {
-                    var result = await entities.FacebookAccounts.Where(e => e.FacebookSID == i_Account.FacebookSID).FirstOrDefaultAsync();
-                    return Ok(result.Nickname);
+                    var account = await entities.FacebookAccounts.Where(e => e.FacebookSID == i_Account.FacebookSID).FirstOrDefaultAsync();
+                    return Ok(account);
                 }
                 return NotFound();
             }
         }
 
         [HttpPost]
-        public async Task<IHttpActionResult> SetNickname([FromBody] FacebookAccount i_Account)
+        public async Task<IHttpActionResult> Register([FromBody] FacebookAccount i_Account)
         {
             using (CarWatchDBEntities entities = new CarWatchDBEntities())
             {
