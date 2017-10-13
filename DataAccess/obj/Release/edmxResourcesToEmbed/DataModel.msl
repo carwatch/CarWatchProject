@@ -1,32 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
   <EntityContainerMapping StorageEntityContainer="CarWatchDBModelStoreContainer" CdmEntityContainer="CarWatchDBEntities">
-    <EntitySetMapping Name="C__MigrationHistory">
-      <EntityTypeMapping TypeName="CarWatchDBModel.C__MigrationHistory">
-        <MappingFragment StoreEntitySet="__MigrationHistory">
-          <ScalarProperty Name="MigrationId" ColumnName="MigrationId" />
-          <ScalarProperty Name="ContextKey" ColumnName="ContextKey" />
-          <ScalarProperty Name="Model" ColumnName="Model" />
-          <ScalarProperty Name="ProductVersion" ColumnName="ProductVersion" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <EntitySetMapping Name="Cars">
-      <EntityTypeMapping TypeName="CarWatchDBModel.Car">
-        <MappingFragment StoreEntitySet="Car">
-          <ScalarProperty Name="Email" ColumnName="Email" />
-          <ScalarProperty Name="LicensePlate" ColumnName="LicensePlate" />
-          <ScalarProperty Name="Type" ColumnName="Type" />
-          <ScalarProperty Name="Location" ColumnName="Location" />
-          <ScalarProperty Name="Longitude" ColumnName="Longitude" />
-          <ScalarProperty Name="Latitude" ColumnName="Latitude" />
-          <ScalarProperty Name="Country" ColumnName="Country" />
-          <ScalarProperty Name="City" ColumnName="City" />
-          <ScalarProperty Name="Street" ColumnName="Street" />
-          <ScalarProperty Name="StreetNumber" ColumnName="StreetNumber" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
     <EntitySetMapping Name="Exchanges">
       <EntityTypeMapping TypeName="CarWatchDBModel.Exchange">
         <MappingFragment StoreEntitySet="Exchange">
@@ -46,6 +20,8 @@
           <ScalarProperty Name="TimeMatched" ColumnName="TimeMatched" />
           <ScalarProperty Name="TimeExchanged" ColumnName="TimeExchanged" />
           <ScalarProperty Name="Status" ColumnName="Status" />
+          <ScalarProperty Name="DriverLongitude" ColumnName="DriverLongitude" />
+          <ScalarProperty Name="DriverLatitude" ColumnName="DriverLatitude" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>

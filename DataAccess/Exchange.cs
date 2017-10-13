@@ -30,5 +30,7 @@ namespace DataAccess
         public System.DateTime TimeMatched { get; set; }
         public System.DateTime TimeExchanged { get; set; }
         public int Status { get; set; }
+        public double DriverLongitude { get; set; }
+        public double DriverLatitude { get; set; }
     }
 }

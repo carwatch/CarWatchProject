@@ -23,6 +23,12 @@ namespace CarWatch.Controllers
             public int status { get; set; }
         }
 
+        public class Point
+        {
+            public double Longitude { get; set; }
+            public double Latitude { get; set; }
+        }
+
         [BasicAuthentication]
         [HttpPost]
         public async Task<IHttpActionResult> AddSearch([FromBody] Search i_ParkingSpotSearch)
@@ -249,6 +255,46 @@ namespace CarWatch.Controllers
             {
                 var result = await entities.Exchanges.FirstOrDefaultAsync(e => (e.ConsumerNickname == nickname || e.ProviderNickname == nickname) && e.Status == 0);
                 return Ok(result);
+            }
+        }
+
+        [BasicAuthentication]
+        [HttpPost]
+        public async Task<IHttpActionResult> UpdateDriverLocation(Point i_Point)
+        {
+            string nickname = Thread.CurrentPrincipal.Identity.Name;
+            using (CarWatchDBEntities entities = new CarWatchDBEntities())
+            {
+                var result = await entities.Exchanges.FirstOrDefaultAsync(e => e.ConsumerNickname == nickname && e.Status == 0);
+                if (result == null)
+                {
+                    return BadRequest("you are not involved with an open exchange");
+                }
+                entities.Exchanges.Remove(result);
+                result.DriverLongitude = i_Point.Longitude;
+                result.DriverLatitude = i_Point.Latitude;
+                entities.Exchanges.Add(result);
+                await entities.SaveChangesAsync();
+                return Ok();
+            }
+        }
+
+        [BasicAuthentication]
+        [HttpPost]
+        public async Task<IHttpActionResult> GetDriverLocation(Object obj)
+        {
+            string nickname = Thread.CurrentPrincipal.Identity.Name;
+            using (CarWatchDBEntities entities = new CarWatchDBEntities())
+            {
+                var result = await entities.Exchanges.FirstOrDefaultAsync(e => e.ProviderNickname == nickname && e.Status == 0);
+                if (result == null)
+                {
+                    return BadRequest("you are not involved with an open exchange");
+                }
+                Point point = new Point();
+                point.Longitude = result.DriverLongitude;
+                point.Latitude = result.DriverLatitude;
+                return Ok(point);
             }
         }
     }

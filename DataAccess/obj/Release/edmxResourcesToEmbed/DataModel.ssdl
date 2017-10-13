@@ -1,31 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Schema Namespace="CarWatchDBModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012.Azure" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
-  <EntityType Name="__MigrationHistory">
-    <Key>
-      <PropertyRef Name="MigrationId" />
-      <PropertyRef Name="ContextKey" />
-    </Key>
-    <Property Name="MigrationId" Type="nvarchar" MaxLength="150" Nullable="false" />
-    <Property Name="ContextKey" Type="nvarchar" MaxLength="300" Nullable="false" />
-    <Property Name="Model" Type="varbinary(max)" Nullable="false" />
-    <Property Name="ProductVersion" Type="nvarchar" MaxLength="32" Nullable="false" />
-  </EntityType>
-  <EntityType Name="Car">
-    <Key>
-      <PropertyRef Name="Email" />
-      <PropertyRef Name="LicensePlate" />
-    </Key>
-    <Property Name="Email" Type="nvarchar" MaxLength="50" Nullable="false" />
-    <Property Name="LicensePlate" Type="nvarchar" MaxLength="15" Nullable="false" />
-    <Property Name="Type" Type="int" Nullable="false" />
-    <Property Name="Location" Type="nvarchar" MaxLength="100" />
-    <Property Name="Longitude" Type="float" />
-    <Property Name="Latitude" Type="float" />
-    <Property Name="Country" Type="nvarchar" MaxLength="50" />
-    <Property Name="City" Type="nvarchar" MaxLength="50" />
-    <Property Name="Street" Type="nvarchar" MaxLength="100" />
-    <Property Name="StreetNumber" Type="int" />
-  </EntityType>
   <EntityType Name="Exchange">
     <Key>
       <PropertyRef Name="ID" />
@@ -46,6 +20,8 @@
     <Property Name="TimeMatched" Type="datetime" Nullable="false" />
     <Property Name="TimeExchanged" Type="datetime" Nullable="false" />
     <Property Name="Status" Type="int" Nullable="false" />
+    <Property Name="DriverLongitude" Type="float" Nullable="false" />
+    <Property Name="DriverLatitude" Type="float" Nullable="false" />
   </EntityType>
   <EntityType Name="FacebookAccount">
     <Key>
@@ -101,8 +77,6 @@
     <Property Name="Distance" Type="int" Nullable="false" />
   </EntityType>
   <EntityContainer Name="CarWatchDBModelStoreContainer">
-    <EntitySet Name="__MigrationHistory" EntityType="Self.__MigrationHistory" Schema="dbo" store:Type="Tables" />
-    <EntitySet Name="Car" EntityType="Self.Car" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Exchange" EntityType="Self.Exchange" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="FacebookAccount" EntityType="Self.FacebookAccount" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Message" EntityType="Self.Message" Schema="dbo" store:Type="Tables" />
