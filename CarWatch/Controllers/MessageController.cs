@@ -33,7 +33,9 @@ namespace CarWatch.Controllers
 
             using (CarWatchDBEntities entities = new CarWatchDBEntities())
             {
-                i_Message.Time = DateTime.Now;
+                DateTime timeUtc = DateTime.UtcNow;
+                TimeZoneInfo iLZone = TimeZoneInfo.FindSystemTimeZoneById("Israel Standard Time");
+                i_Message.Time = TimeZoneInfo.ConvertTimeFromUtc(timeUtc, iLZone);
                 entities.Messages.Add(i_Message);
                 await entities.SaveChangesAsync();
                 return Ok();

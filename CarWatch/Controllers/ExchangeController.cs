@@ -46,7 +46,9 @@ namespace CarWatch.Controllers
                 {
                     entities.Searches.Remove(result);
                 }
-                i_ParkingSpotSearch.TimeOpened = DateTime.Now;
+                DateTime timeUtc = DateTime.UtcNow;
+                TimeZoneInfo iLZone = TimeZoneInfo.FindSystemTimeZoneById("Israel Standard Time");
+                i_ParkingSpotSearch.TimeOpened = TimeZoneInfo.ConvertTimeFromUtc(timeUtc, iLZone);
                 entities.Searches.Add(i_ParkingSpotSearch);
                 await entities.SaveChangesAsync();
                 return Ok();
@@ -100,7 +102,9 @@ namespace CarWatch.Controllers
                 {
                     entities.Proposals.Remove(result);
                 }
-                i_ParkingSpotProposal.TimeOpened = DateTime.Now;
+                DateTime timeUtc = DateTime.UtcNow;
+                TimeZoneInfo iLZone = TimeZoneInfo.FindSystemTimeZoneById("Israel Standard Time");
+                i_ParkingSpotProposal.TimeOpened = TimeZoneInfo.ConvertTimeFromUtc(timeUtc, iLZone);
                 entities.Proposals.Add(i_ParkingSpotProposal);
                 await entities.SaveChangesAsync();
 
@@ -219,8 +223,10 @@ namespace CarWatch.Controllers
             exchange.Street = i_Proposal.Street;
             exchange.StreetNumber = i_Proposal.StreetNumber;
             exchange.TimeOpened = i_Search.TimeOpened;
-            exchange.TimeMatched = DateTime.Now;
-            exchange.TimeExchanged = DateTime.Now;
+            DateTime timeUtc = DateTime.UtcNow;
+            TimeZoneInfo iLZone = TimeZoneInfo.FindSystemTimeZoneById("Israel Standard Time");
+            exchange.TimeMatched = TimeZoneInfo.ConvertTimeFromUtc(timeUtc, iLZone);
+            exchange.TimeExchanged = exchange.TimeMatched;
             exchange.Status = 0;
             return exchange;
         }
@@ -239,7 +245,9 @@ namespace CarWatch.Controllers
                 }
                 entities.Exchanges.Remove(result);
                 result.Status = i_Status.status;
-                result.TimeExchanged = DateTime.Now;
+                DateTime timeUtc = DateTime.UtcNow;
+                TimeZoneInfo iLZone = TimeZoneInfo.FindSystemTimeZoneById("Israel Standard Time");
+                result.TimeExchanged = TimeZoneInfo.ConvertTimeFromUtc(timeUtc, iLZone);
                 entities.Exchanges.Add(result);
                 await entities.SaveChangesAsync();
                 return Ok(result);
