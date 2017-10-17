@@ -51,7 +51,7 @@ namespace CarWatch.Controllers
                 i_Message.Time = TimeZoneInfo.ConvertTimeFromUtc(timeUtc, iLZone);
                 entities.Messages.Add(i_Message);
                 TodoItem todoItem = new TodoItem();
-                todoItem.Text = i_Message.Sender + ";" + account.Nickname + ";send;" + i_Message.Content;
+                todoItem.Text = i_Message.Sender + ";" + account.Nickname + ";sendMessage;" + i_Message.Content;
                 var response = await client.PostAsJsonAsync("tables/TodoItem/PostTodoItem?ZUMO-API-VERSION=2.0.0", todoItem);
                 await entities.SaveChangesAsync();
                 return Ok();
@@ -80,7 +80,7 @@ namespace CarWatch.Controllers
                 i_Message.Time = TimeZoneInfo.ConvertTimeFromUtc(timeUtc, iLZone);
                 entities.Messages.Add(i_Message);
                 TodoItem todoItem = new TodoItem();
-                todoItem.Text = i_Message.Sender + ";" + account.Nickname + ";send;" + i_Message.Content;
+                todoItem.Text = i_Message.Sender + ";" + account.Nickname + ";sendMessage;" + i_Message.Content;
                 var response = await client.PostAsJsonAsync("tables/TodoItem/PostTodoItem?ZUMO-API-VERSION=2.0.0", todoItem);
                 await entities.SaveChangesAsync();
                 return Ok();
