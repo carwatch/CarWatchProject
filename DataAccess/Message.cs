@@ -14,8 +14,8 @@ namespace DataAccess
     
     public partial class Message
     {
-        public string SenderNickname { get; set; }
-        public string ReceiverNickname { get; set; }
+        public string Sender { get; set; }
+        public string Receiver { get; set; }
         public System.DateTime Time { get; set; }
         public string Content { get; set; }
     }

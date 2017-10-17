@@ -193,6 +193,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="MatchMaker.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -269,7 +270,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\DataAccess\DataAccess.csproj">
-      <Project>{9382805b-7fb6-4515-9f6b-5e36ed453840}</Project>
+      <Project>{47b2419a-0f67-40b1-9b3d-2739d0fff0ca}</Project>
       <Name>DataAccess</Name>
     </ProjectReference>
   </ItemGroup>

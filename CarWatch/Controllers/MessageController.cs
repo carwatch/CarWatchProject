@@ -15,28 +15,73 @@ namespace CarWatch.Controllers
     public class MessageController : ApiController
     {
         private HttpClient client = new HttpClient();
+        
+        public MessageController()
+        {
+            client.BaseAddress = new Uri("https://carwatchapp.azurewebsites.net/");
+            client.DefaultRequestHeaders.Accept.Clear();
+            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+        }
+
         public class MessageDetails
         {
-            public string SenderNickname { get; set; }
-            public string ReceiverNickname { get; set; }
+            public string Sender { get; set; }
+            public string Receiver { get; set; }
         }
 
         [BasicAuthentication]
         [HttpPost]
-        public async Task<IHttpActionResult> Send([FromBody] Message i_Message)
+        public async Task<IHttpActionResult> SendByNickname([FromBody] Message i_Message)
         {
             string nickname = Thread.CurrentPrincipal.Identity.Name;
-            if (i_Message.SenderNickname != nickname)
+            if (i_Message.Sender != nickname)
             {
                 return BadRequest("Nicknames do not match.");
             }
 
             using (CarWatchDBEntities entities = new CarWatchDBEntities())
             {
+                FacebookAccount account = await entities.FacebookAccounts.FirstOrDefaultAsync(e => e.Nickname == i_Message.Receiver);
+                if(account == null)
+                {
+                    return BadRequest("The receiver nickname was not found.");
+                }
                 DateTime timeUtc = DateTime.UtcNow;
                 TimeZoneInfo iLZone = TimeZoneInfo.FindSystemTimeZoneById("Israel Standard Time");
                 i_Message.Time = TimeZoneInfo.ConvertTimeFromUtc(timeUtc, iLZone);
                 entities.Messages.Add(i_Message);
+                TodoItem todoItem = new TodoItem();
+                todoItem.Text = i_Message.Sender + ";" + account.Nickname + ";send;" + i_Message.Content;
+                var response = await client.PostAsJsonAsync("tables/TodoItem/PostTodoItem?ZUMO-API-VERSION=2.0.0", todoItem);
+                await entities.SaveChangesAsync();
+                return Ok();
+            }
+        }
+
+        [BasicAuthentication]
+        [HttpPost]
+        public async Task<IHttpActionResult> SendByLicensePlate([FromBody] Message i_Message)
+        {
+            string nickname = Thread.CurrentPrincipal.Identity.Name;
+            if (i_Message.Sender != nickname)
+            {
+                return BadRequest("Nicknames do not match.");
+            }
+
+            using (CarWatchDBEntities entities = new CarWatchDBEntities())
+            {
+                FacebookAccount account = await entities.FacebookAccounts.FirstOrDefaultAsync(e => e.LicensePlate == i_Message.Receiver);
+                if (account == null)
+                {
+                    return BadRequest("The receiver nickname was not found.");
+                }
+                DateTime timeUtc = DateTime.UtcNow;
+                TimeZoneInfo iLZone = TimeZoneInfo.FindSystemTimeZoneById("Israel Standard Time");
+                i_Message.Time = TimeZoneInfo.ConvertTimeFromUtc(timeUtc, iLZone);
+                entities.Messages.Add(i_Message);
+                TodoItem todoItem = new TodoItem();
+                todoItem.Text = i_Message.Sender + ";" + account.Nickname + ";send;" + i_Message.Content;
+                var response = await client.PostAsJsonAsync("tables/TodoItem/PostTodoItem?ZUMO-API-VERSION=2.0.0", todoItem);
                 await entities.SaveChangesAsync();
                 return Ok();
             }
@@ -47,14 +92,14 @@ namespace CarWatch.Controllers
         public async Task<IHttpActionResult> GetMessagesHistory([FromBody] MessageDetails i_Message)
         {
             string nickname = Thread.CurrentPrincipal.Identity.Name;
-            if (i_Message.SenderNickname != nickname)
+            if (i_Message.Sender != nickname)
             {
                 return BadRequest("Nicknames do not match.");
             }
 
             using (CarWatchDBEntities entities = new CarWatchDBEntities())
             {
-                var result = await entities.Messages.Where(e => (e.SenderNickname == i_Message.SenderNickname && e.ReceiverNickname == i_Message.ReceiverNickname) || (e.SenderNickname == i_Message.ReceiverNickname && e.ReceiverNickname == i_Message.SenderNickname)).ToListAsync();
+                List<Message> result = await entities.Messages.Where(e => (e.Sender == i_Message.Sender && e.Receiver == i_Message.Receiver) || (e.Sender == i_Message.Receiver && e.Receiver == i_Message.Sender)).ToListAsync();
                 return Ok(result);
             }
         }
@@ -64,7 +109,7 @@ namespace CarWatch.Controllers
         public async Task<IHttpActionResult> GetContacts([FromBody] MessageDetails i_Message)
         {
             string nickname = Thread.CurrentPrincipal.Identity.Name;
-            if (i_Message.SenderNickname != nickname)
+            if (i_Message.Sender != nickname)
             {
                 return BadRequest("Nicknames do not match.");
             }
@@ -72,18 +117,18 @@ namespace CarWatch.Controllers
             using (CarWatchDBEntities entities = new CarWatchDBEntities())
             {
                 List<string> nicknameList = new List<string>();
-                var messages = await entities.Messages.Where(e => (e.SenderNickname == i_Message.SenderNickname) || (e.ReceiverNickname == i_Message.SenderNickname)).ToListAsync();
+                List<Message> messages = await entities.Messages.Where(e => (e.Sender == i_Message.Sender) || (e.Receiver == i_Message.Sender)).ToListAsync();
                 foreach (Message msg in messages)
                 {
-                    if (i_Message.SenderNickname != msg.SenderNickname)
+                    if (i_Message.Sender != msg.Sender)
                     {
-                        if (!nicknameList.Contains(msg.SenderNickname))
-                            nicknameList.Add(msg.SenderNickname);
+                        if (!nicknameList.Contains(msg.Sender))
+                            nicknameList.Add(msg.Sender);
                     }
                     else
                     {
-                        if (!nicknameList.Contains(msg.ReceiverNickname))
-                            nicknameList.Add(msg.ReceiverNickname);
+                        if (!nicknameList.Contains(msg.Receiver))
+                            nicknameList.Add(msg.Receiver);
                     }
                 }
 

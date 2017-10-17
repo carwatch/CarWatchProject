@@ -10,13 +10,22 @@ using System.Data.Entity;
 using System.Timers;
 using System.Data.Entity.SqlServer;
 using System.Threading;
+using System.Net.Http.Headers;
 
 namespace CarWatch.Controllers
 {
     public class ExchangeController : ApiController
     {
-        private int k_EarthRadius = 6371;
-        private int k_SearchingTime = 600; // seconds
+        private string k_TheServer = "TheServer";
+        private string k_ExchangeCancelMessage = "The exchange has been canceled.";
+        private HttpClient client = new HttpClient();
+
+        public ExchangeController()
+        {
+            client.BaseAddress = new Uri("https://carwatchapp.azurewebsites.net/");
+            client.DefaultRequestHeaders.Accept.Clear();
+            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+        }
 
         public class ExchangeStatus
         {
@@ -41,7 +50,7 @@ namespace CarWatch.Controllers
 
             using (CarWatchDBEntities entities = new CarWatchDBEntities())
             {
-                var result = await entities.Searches.FirstOrDefaultAsync(e => e.Nickname == nickname);
+                Search result = await entities.Searches.FirstOrDefaultAsync(e => e.Nickname == nickname);
                 if (result != null)
                 {
                     entities.Searches.Remove(result);
@@ -62,7 +71,7 @@ namespace CarWatch.Controllers
             string nickname = Thread.CurrentPrincipal.Identity.Name;
             using (CarWatchDBEntities entities = new CarWatchDBEntities())
             {
-                var result = await entities.Searches.FirstOrDefaultAsync(e => e.Nickname == nickname);
+                Search result = await entities.Searches.FirstOrDefaultAsync(e => e.Nickname == nickname);
                 if (result == null)
                 {
                     return BadRequest("This nickname has not been searching for a parking spot.");
@@ -80,7 +89,7 @@ namespace CarWatch.Controllers
             string nickname = Thread.CurrentPrincipal.Identity.Name;
             using (CarWatchDBEntities entities = new CarWatchDBEntities())
             {
-                var result = await entities.Searches.FirstOrDefaultAsync(e => e.Nickname == nickname);
+                Search result = await entities.Searches.FirstOrDefaultAsync(e => e.Nickname == nickname);
                 return Ok(result);
             }
         }
@@ -97,7 +106,7 @@ namespace CarWatch.Controllers
 
             using (CarWatchDBEntities entities = new CarWatchDBEntities())
             {
-                var result = await entities.Proposals.FirstOrDefaultAsync(e => e.Nickname == nickname);
+                Proposal result = await entities.Proposals.FirstOrDefaultAsync(e => e.Nickname == nickname);
                 if (result != null)
                 {
                     entities.Proposals.Remove(result);
@@ -107,44 +116,7 @@ namespace CarWatch.Controllers
                 i_ParkingSpotProposal.TimeOpened = TimeZoneInfo.ConvertTimeFromUtc(timeUtc, iLZone);
                 entities.Proposals.Add(i_ParkingSpotProposal);
                 await entities.SaveChangesAsync();
-
-                DateTime timeout = DateTime.Now.AddSeconds(k_SearchingTime);
-                do
-                {
-                    List<Search> searchList = await entities.Searches.Where(
-                        e => 2 * k_EarthRadius * (SqlFunctions.SquareRoot(SqlFunctions.Square(SqlFunctions.Sin((SqlFunctions.Radians(i_ParkingSpotProposal.Latitude) - SqlFunctions.Radians(e.Latitude)) / 2)) + SqlFunctions.Cos(SqlFunctions.Radians(i_ParkingSpotProposal.Latitude)) * SqlFunctions.Cos(SqlFunctions.Radians(e.Latitude)) * SqlFunctions.Square(SqlFunctions.Sin((SqlFunctions.Radians(i_ParkingSpotProposal.Longitude) - SqlFunctions.Radians(e.Longitude)) / 2)))) <= e.Distance).ToListAsync();
-                    if (searchList.Count > 0)
-                    {
-                        Search searchToRemove = searchList[0];
-                        var firstAccountNickname = searchList[0].Nickname;
-                        var parkingSpotMatch = await entities.FacebookAccounts.FirstOrDefaultAsync(e => e.Nickname.CompareTo(firstAccountNickname) == 0);
-                        foreach (var item in searchList)
-                        {
-                            var account = await entities.FacebookAccounts.FirstOrDefaultAsync(e => e.Nickname.CompareTo(item.Nickname) == 0);
-                            if (account.Rank > parkingSpotMatch.Rank)
-                            {
-                                parkingSpotMatch = account;
-                                searchToRemove = item;
-                            }
-                        }
-                        var isAlive = await entities.Proposals.FirstOrDefaultAsync(e => e.Nickname == nickname);
-                        if (isAlive == null)
-                        {
-                            return BadRequest("This nickname has not been providing a parking spot.");
-                        }
-                        Exchange exchange =  createExchangeObject(searchToRemove, i_ParkingSpotProposal);
-                        entities.Exchanges.Add(exchange);
-                        entities.Searches.Remove(searchToRemove);
-                        entities.Proposals.Remove(i_ParkingSpotProposal);
-                        await entities.SaveChangesAsync();
-                        parkingSpotMatch.FacebookSID = string.Empty;
-                        return Ok(parkingSpotMatch);
-                    }
-                }
-                while (DateTime.Now <= timeout);
-                entities.Proposals.Remove(i_ParkingSpotProposal);
-                await entities.SaveChangesAsync();
-                return BadRequest("No match has been found.");
+                return Ok();
             }
         }
 
@@ -155,7 +127,7 @@ namespace CarWatch.Controllers
             string nickname = Thread.CurrentPrincipal.Identity.Name;
             using (CarWatchDBEntities entities = new CarWatchDBEntities())
             {
-                var result = await entities.Proposals.FirstOrDefaultAsync(e => e.Nickname == nickname);
+                Proposal result = await entities.Proposals.FirstOrDefaultAsync(e => e.Nickname == nickname);
                 if (result == null)
                 {
                     return BadRequest("This nickname has not proposed a parking spot.");
@@ -174,61 +146,9 @@ namespace CarWatch.Controllers
             string nickname = Thread.CurrentPrincipal.Identity.Name;
             using (CarWatchDBEntities entities = new CarWatchDBEntities())
             {
-                var result = await entities.Proposals.FirstOrDefaultAsync(e => e.Nickname == nickname);
+                Proposal result = await entities.Proposals.FirstOrDefaultAsync(e => e.Nickname == nickname);
                 return Ok(result);
             }
-        }
-
-        /*[BasicAuthentication]
-        [HttpPost]
-        public async Task<IHttpActionResult> Exchange([FromBody] Exchange i_Transaction)
-        {
-            string nickname = Thread.CurrentPrincipal.Identity.Name;
-            if (i_Transaction.ConsumerNickname != nickname)
-            {
-                return BadRequest("Nicknames do not match.");
-            }
-
-            using (CarWatchDBEntities entities = new CarWatchDBEntities())
-            {
-                FacebookAccount account = await entities.FacebookAccounts.FirstOrDefaultAsync(e => e.Nickname == i_Transaction.ProviderNickname);
-                if (account == null)
-                {
-                    return BadRequest("Invalid nickname.");
-                }
-
-                // Exchange successful
-                if(i_Transaction.Status == 1)
-                    account.Rank++;
-
-                i_Transaction.TimeExchanged = DateTime.Now;
-                entities.Exchanges.Add(i_Transaction);
-                await entities.SaveChangesAsync();
-                return Ok();
-            }
-        }*/
-
-        private Exchange createExchangeObject(Search i_Search, Proposal i_Proposal)
-        {
-            Exchange exchange = new Exchange();
-            exchange.ProviderNickname = i_Proposal.Nickname;
-            exchange.ConsumerNickname = i_Search.Nickname;
-            exchange.ProviderLicensePlate = i_Proposal.LicensePlate;
-            exchange.ConsumerLicensePlate = i_Search.LicensePlate;
-            exchange.Location = i_Proposal.Location;
-            exchange.Longitude = i_Proposal.Longitude;
-            exchange.Latitude = i_Proposal.Latitude;
-            exchange.Country = i_Proposal.Country;
-            exchange.City = i_Proposal.City;
-            exchange.Street = i_Proposal.Street;
-            exchange.StreetNumber = i_Proposal.StreetNumber;
-            exchange.TimeOpened = i_Search.TimeOpened;
-            DateTime timeUtc = DateTime.UtcNow;
-            TimeZoneInfo iLZone = TimeZoneInfo.FindSystemTimeZoneById("Israel Standard Time");
-            exchange.TimeMatched = TimeZoneInfo.ConvertTimeFromUtc(timeUtc, iLZone);
-            exchange.TimeExchanged = exchange.TimeMatched;
-            exchange.Status = 0;
-            return exchange;
         }
 
         [BasicAuthentication]
@@ -238,8 +158,8 @@ namespace CarWatch.Controllers
             string nickname = Thread.CurrentPrincipal.Identity.Name;
             using (CarWatchDBEntities entities = new CarWatchDBEntities())
             {
-                var result = await entities.Exchanges.FirstOrDefaultAsync(e => e.ConsumerNickname == nickname && e.Status == 0);
-                if(result == null)
+                Exchange result = await entities.Exchanges.FirstOrDefaultAsync(e => e.ConsumerNickname == nickname && e.Status == 0);
+                if (result == null)
                 {
                     return BadRequest("you are not involved with an open exchange");
                 }
@@ -261,7 +181,7 @@ namespace CarWatch.Controllers
             string nickname = Thread.CurrentPrincipal.Identity.Name;
             using (CarWatchDBEntities entities = new CarWatchDBEntities())
             {
-                var result = await entities.Exchanges.FirstOrDefaultAsync(e => (e.ConsumerNickname == nickname || e.ProviderNickname == nickname) && e.Status == 0);
+                Exchange result = await entities.Exchanges.FirstOrDefaultAsync(e => (e.ConsumerNickname == nickname || e.ProviderNickname == nickname) && e.Status == 0);
                 return Ok(result);
             }
         }
@@ -273,7 +193,7 @@ namespace CarWatch.Controllers
             string nickname = Thread.CurrentPrincipal.Identity.Name;
             using (CarWatchDBEntities entities = new CarWatchDBEntities())
             {
-                var result = await entities.Exchanges.FirstOrDefaultAsync(e => e.ConsumerNickname == nickname && e.Status == 0);
+                Exchange result = await entities.Exchanges.FirstOrDefaultAsync(e => e.ConsumerNickname == nickname && e.Status == 0);
                 if (result == null)
                 {
                     return BadRequest("you are not involved with an open exchange");
@@ -294,7 +214,7 @@ namespace CarWatch.Controllers
             string nickname = Thread.CurrentPrincipal.Identity.Name;
             using (CarWatchDBEntities entities = new CarWatchDBEntities())
             {
-                var result = await entities.Exchanges.FirstOrDefaultAsync(e => e.ProviderNickname == nickname && e.Status == 0);
+                Exchange result = await entities.Exchanges.FirstOrDefaultAsync(e => e.ProviderNickname == nickname && e.Status == 0);
                 if (result == null)
                 {
                     return BadRequest("you are not involved with an open exchange");
@@ -304,6 +224,33 @@ namespace CarWatch.Controllers
                 point.Latitude = result.DriverLatitude;
                 return Ok(point);
             }
+        }
+
+        [BasicAuthentication]
+        [HttpPost]
+        public async Task<IHttpActionResult> CancelExchange(Object obj)
+        {
+            string nickname = Thread.CurrentPrincipal.Identity.Name;
+            using (CarWatchDBEntities entities = new CarWatchDBEntities())
+            {
+                Exchange result = await entities.Exchanges.FirstOrDefaultAsync(e => (e.ProviderNickname == nickname || e.ConsumerNickname == nickname) && e.Status == 0);
+                if (result == null)
+                {
+                    return BadRequest("you are not involved with an open exchange");
+                }
+                pushToClient(result.ConsumerNickname);
+                pushToClient(result.ProviderNickname);
+                entities.Exchanges.Remove(result);
+                await entities.SaveChangesAsync();
+                return Ok();
+            }
+        }
+
+        private async void pushToClient(string i_Nickname)
+        {
+            TodoItem todoItem = new TodoItem();
+            todoItem.Text = k_TheServer + ";" + i_Nickname + ";send;" + k_ExchangeCancelMessage;
+            var response = await client.PostAsJsonAsync("tables/TodoItem/PostTodoItem?ZUMO-API-VERSION=2.0.0", todoItem);
         }
     }
 }

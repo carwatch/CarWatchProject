@@ -39,12 +39,12 @@
         </EntityType>
         <EntityType Name="Message">
           <Key>
-            <PropertyRef Name="SenderNickname" />
-            <PropertyRef Name="ReceiverNickname" />
+            <PropertyRef Name="Sender" />
+            <PropertyRef Name="Receiver" />
             <PropertyRef Name="Time" />
           </Key>
-          <Property Name="SenderNickname" Type="nvarchar" MaxLength="50" Nullable="false" />
-          <Property Name="ReceiverNickname" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Sender" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Receiver" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="Time" Type="datetime" Nullable="false" />
           <Property Name="Content" Type="nvarchar" MaxLength="100" Nullable="false" />
         </EntityType>
@@ -127,12 +127,12 @@
         </EntityType>
         <EntityType Name="Message">
           <Key>
-            <PropertyRef Name="SenderNickname" />
-            <PropertyRef Name="ReceiverNickname" />
+            <PropertyRef Name="Sender" />
+            <PropertyRef Name="Receiver" />
             <PropertyRef Name="Time" />
           </Key>
-          <Property Name="SenderNickname" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="ReceiverNickname" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Sender" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Receiver" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="Time" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="Content" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
         </EntityType>
@@ -219,8 +219,8 @@
           <EntitySetMapping Name="Messages">
             <EntityTypeMapping TypeName="CarWatchDBModel.Message">
               <MappingFragment StoreEntitySet="Message">
-                <ScalarProperty Name="SenderNickname" ColumnName="SenderNickname" />
-                <ScalarProperty Name="ReceiverNickname" ColumnName="ReceiverNickname" />
+                <ScalarProperty Name="Sender" ColumnName="Sender" />
+                <ScalarProperty Name="Receiver" ColumnName="Receiver" />
                 <ScalarProperty Name="Time" ColumnName="Time" />
                 <ScalarProperty Name="Content" ColumnName="Content" />
               </MappingFragment>
