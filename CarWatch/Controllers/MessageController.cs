@@ -14,8 +14,10 @@ namespace CarWatch.Controllers
 {
     public class MessageController : ApiController
     {
+        private string k_TheServer = "TheServer";
+        private string k_LicensePlateNotFound = "This license plate is not registered";
         private HttpClient client = new HttpClient();
-        
+
         public MessageController()
         {
             client.BaseAddress = new Uri("https://carwatchapp.azurewebsites.net/");
@@ -27,6 +29,12 @@ namespace CarWatch.Controllers
         {
             public string Sender { get; set; }
             public string Receiver { get; set; }
+        }
+
+        public class PushMessage
+        {
+            public string LicensePlate { get; set; }
+            public string Content { get; set; }
         }
 
         [BasicAuthentication]
@@ -42,7 +50,7 @@ namespace CarWatch.Controllers
             using (CarWatchDBEntities entities = new CarWatchDBEntities())
             {
                 FacebookAccount account = await entities.FacebookAccounts.FirstOrDefaultAsync(e => e.Nickname == i_Message.Receiver);
-                if(account == null)
+                if (account == null)
                 {
                     return BadRequest("The receiver nickname was not found.");
                 }
@@ -70,16 +78,18 @@ namespace CarWatch.Controllers
 
             using (CarWatchDBEntities entities = new CarWatchDBEntities())
             {
+                TodoItem todoItem = new TodoItem();
                 FacebookAccount account = await entities.FacebookAccounts.FirstOrDefaultAsync(e => e.LicensePlate == i_Message.Receiver);
                 if (account == null)
                 {
-                    return BadRequest("The receiver nickname was not found.");
+                    todoItem.Text = k_TheServer + ";" + i_Message.Sender + ";sendMessage;" + k_LicensePlateNotFound;
+                    await client.PostAsJsonAsync("tables/TodoItem/PostTodoItem?ZUMO-API-VERSION=2.0.0", todoItem);
+                    return BadRequest(k_LicensePlateNotFound);
                 }
                 DateTime timeUtc = DateTime.UtcNow;
                 TimeZoneInfo iLZone = TimeZoneInfo.FindSystemTimeZoneById("Israel Standard Time");
                 i_Message.Time = TimeZoneInfo.ConvertTimeFromUtc(timeUtc, iLZone);
                 entities.Messages.Add(i_Message);
-                TodoItem todoItem = new TodoItem();
                 todoItem.Text = i_Message.Sender + ";" + account.Nickname + ";sendMessage;" + i_Message.Content;
                 var response = await client.PostAsJsonAsync("tables/TodoItem/PostTodoItem?ZUMO-API-VERSION=2.0.0", todoItem);
                 await entities.SaveChangesAsync();
