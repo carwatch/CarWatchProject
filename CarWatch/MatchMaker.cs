@@ -123,14 +123,14 @@ namespace CarWatch
         {
 
             TodoItem todoItem = new TodoItem();
-            todoItem.Text = k_TheServer + ";" + i_ProposerNickname + ";foundSeeker;" + k_MatchFoundMessage + ";" + i_SearcherLicensePlate;
+            todoItem.Text = k_TheServer + ";" + i_ProposerNickname + ";foundSeeker;" + i_SearcherLicensePlate + ";" + k_MatchFoundMessage;
             await client.PostAsJsonAsync("tables/TodoItem/PostTodoItem?ZUMO-API-VERSION=2.0.0", todoItem);
         }
 
         private async void sendToSeacher(string i_SeacherNickname, string i_ProposerLicensePlate, double i_Longitude, double i_Latitude)
         {
             TodoItem todoItem = new TodoItem();
-            todoItem.Text = k_TheServer + ";" + i_SeacherNickname + ";foundParking;" + k_MatchFoundMessage + ";" + i_ProposerLicensePlate + ";" + i_Longitude.ToString() + ";" + i_Latitude.ToString();
+            todoItem.Text = k_TheServer + ";" + i_SeacherNickname + ";foundParking;" + i_ProposerLicensePlate + ";" + i_Latitude.ToString() + ";" + i_Longitude.ToString() + ";" + k_MatchFoundMessage;
             await client.PostAsJsonAsync("tables/TodoItem/PostTodoItem?ZUMO-API-VERSION=2.0.0", todoItem);
         }
     }

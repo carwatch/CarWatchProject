@@ -59,7 +59,7 @@ namespace CarWatch.Controllers
                 i_Message.Time = TimeZoneInfo.ConvertTimeFromUtc(timeUtc, iLZone);
                 entities.Messages.Add(i_Message);
                 TodoItem todoItem = new TodoItem();
-                todoItem.Text = i_Message.Sender + ";" + account.Nickname + ";sendMessage;" + i_Message.Content;
+                todoItem.Text = i_Message.Sender + ";" + account.Nickname + ";sendChatMessage;" + i_Message.Content;
                 var response = await client.PostAsJsonAsync("tables/TodoItem/PostTodoItem?ZUMO-API-VERSION=2.0.0", todoItem);
                 await entities.SaveChangesAsync();
                 return Ok();
@@ -82,7 +82,7 @@ namespace CarWatch.Controllers
                 FacebookAccount account = await entities.FacebookAccounts.FirstOrDefaultAsync(e => e.LicensePlate == i_Message.Receiver);
                 if (account == null)
                 {
-                    todoItem.Text = k_TheServer + ";" + i_Message.Sender + ";sendMessage;" + k_LicensePlateNotFound;
+                    todoItem.Text = k_TheServer + ";" + i_Message.Sender + ";sendToLicense;" + k_LicensePlateNotFound;
                     await client.PostAsJsonAsync("tables/TodoItem/PostTodoItem?ZUMO-API-VERSION=2.0.0", todoItem);
                     return BadRequest(k_LicensePlateNotFound);
                 }
