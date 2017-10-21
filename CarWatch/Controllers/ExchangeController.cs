@@ -163,12 +163,10 @@ namespace CarWatch.Controllers
                 {
                     return BadRequest("you are not involved with an open exchange");
                 }
-                entities.Exchanges.Remove(result);
                 result.Status = i_Status.status;
                 DateTime timeUtc = DateTime.UtcNow;
                 TimeZoneInfo iLZone = TimeZoneInfo.FindSystemTimeZoneById("Israel Standard Time");
                 result.TimeExchanged = TimeZoneInfo.ConvertTimeFromUtc(timeUtc, iLZone);
-                entities.Exchanges.Add(result);
                 await entities.SaveChangesAsync();
                 return Ok(result);
             }
@@ -198,10 +196,8 @@ namespace CarWatch.Controllers
                 {
                     return BadRequest("you are not involved with an open exchange");
                 }
-                entities.Exchanges.Remove(result);
                 result.DriverLongitude = i_Point.Longitude;
                 result.DriverLatitude = i_Point.Latitude;
-                entities.Exchanges.Add(result);
                 await entities.SaveChangesAsync();
                 return Ok();
             }
