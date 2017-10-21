@@ -90,7 +90,7 @@ namespace CarWatch.Controllers
                 TimeZoneInfo iLZone = TimeZoneInfo.FindSystemTimeZoneById("Israel Standard Time");
                 i_Message.Time = TimeZoneInfo.ConvertTimeFromUtc(timeUtc, iLZone);
                 entities.Messages.Add(i_Message);
-                todoItem.Text = i_Message.Sender + ";" + account.Nickname + ";sendMessage;" + i_Message.Content;
+                todoItem.Text = i_Message.Sender + ";" + account.Nickname + ";sendToLicense;" + i_Message.Content;
                 var response = await client.PostAsJsonAsync("tables/TodoItem/PostTodoItem?ZUMO-API-VERSION=2.0.0", todoItem);
                 await entities.SaveChangesAsync();
                 return Ok();
