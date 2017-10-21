@@ -14,6 +14,8 @@ namespace CarWatch
     {
         private string k_TheServer = "TheServer";
         private string k_MatchFoundMessage = "A match has been found!";
+        private string k_ProposerMessage = "נמצא מחפש חניה!";
+        private string k_SearcherMessage = "נמצאה חניה!";
         private int k_EarthRadius = 6371;
         private HttpClient client = new HttpClient();
 
@@ -123,14 +125,14 @@ namespace CarWatch
         {
 
             TodoItem todoItem = new TodoItem();
-            todoItem.Text = k_TheServer + ";" + i_ProposerNickname + ";foundSeeker;" + i_SearcherLicensePlate + ";" + k_MatchFoundMessage;
+            todoItem.Text = k_TheServer + ";" + i_ProposerNickname + ";foundSeeker;" + i_SearcherLicensePlate + ";" + k_ProposerMessage;
             await client.PostAsJsonAsync("tables/TodoItem/PostTodoItem?ZUMO-API-VERSION=2.0.0", todoItem);
         }
 
         private async void sendToSeacher(string i_SeacherNickname, string i_ProposerLicensePlate, double i_Longitude, double i_Latitude)
         {
             TodoItem todoItem = new TodoItem();
-            todoItem.Text = k_TheServer + ";" + i_SeacherNickname + ";foundParking;" + i_ProposerLicensePlate + ";" + i_Latitude.ToString() + ";" + i_Longitude.ToString() + ";" + k_MatchFoundMessage;
+            todoItem.Text = k_TheServer + ";" + i_SeacherNickname + ";foundParking;" + i_ProposerLicensePlate + ";" + i_Latitude.ToString() + ";" + i_Longitude.ToString() + ";" + k_SearcherMessage;
             await client.PostAsJsonAsync("tables/TodoItem/PostTodoItem?ZUMO-API-VERSION=2.0.0", todoItem);
         }
     }
