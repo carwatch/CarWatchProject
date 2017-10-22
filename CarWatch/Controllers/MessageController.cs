@@ -9,13 +9,14 @@ using DataAccess;
 using System.Data.Entity;
 using System.Threading;
 using System.Net.Http.Headers;
+using System.Collections;
 
 namespace CarWatch.Controllers
 {
     public class MessageController : ApiController
     {
         private string k_TheServer = "TheServer";
-        private string k_LicensePlateNotFound = "This license plate is not registered";
+        private string k_LicensePlateNotFound = "This license plate is not registered.";
         private int k_AmountOfMessagesToUser = 30;
         private int k_OfflineStatus = 0;
         private HttpClient client = new HttpClient();
@@ -39,9 +40,23 @@ namespace CarWatch.Controllers
             public string Content { get; set; }
         }
 
-        public class DateTimeWrapper
+        public class ConversationMessage
         {
             public DateTime Time { get; set; }
+            public String Nickname { get; set; }
+        }
+
+        public class MessageComparer : IComparer<Message>
+        {
+            public int Compare(Message i_Message1, Message i_Message2)
+            {
+                if (i_Message1.Time > i_Message2.Time)
+                    return 1;
+                else if (i_Message1.Time < i_Message2.Time)
+                    return -1;
+                else
+                    return 0;
+            }
         }
 
         [BasicAuthentication]
@@ -166,11 +181,12 @@ namespace CarWatch.Controllers
 
         [BasicAuthentication]
         [HttpPost]
-        public async Task<IHttpActionResult> GetMessageHistoryByTime([FromBody] DateTimeWrapper i_Time)
+        public async Task<IHttpActionResult> GetMessageHistoryByTime([FromBody] ConversationMessage i_ConversationMessage)
         {
+            string nickname = Thread.CurrentPrincipal.Identity.Name;
             using (CarWatchDBEntities entities = new CarWatchDBEntities())
             {
-                List<Message> messages = await entities.Messages.Where(e => e.Time < i_Time.Time).ToListAsync();
+                List<Message> messages = await entities.Messages.Where(e => ((e.Sender == nickname && e.Receiver == i_ConversationMessage.Nickname) || (e.Sender == i_ConversationMessage.Nickname && e.Receiver == nickname)) && e.Time < i_ConversationMessage.Time).ToListAsync();
                 int startingIndex, amountToRetrieve;
                 if (messages.Count < k_AmountOfMessagesToUser)
                 {
@@ -182,7 +198,7 @@ namespace CarWatch.Controllers
                     startingIndex = messages.Count - k_AmountOfMessagesToUser;
                     amountToRetrieve = k_AmountOfMessagesToUser;
                 }
-                
+                messages.Sort(new MessageComparer());
                 List<Message> messagesToUser = messages.GetRange(startingIndex, amountToRetrieve);
                 return Ok(messagesToUser);
             }
@@ -190,11 +206,13 @@ namespace CarWatch.Controllers
 
         [BasicAuthentication]
         [HttpPost]
-        public async Task<IHttpActionResult> GetUnreadMessages([FromBody] DateTimeWrapper i_Time)
+        public async Task<IHttpActionResult> GetUnreadMessages([FromBody] ConversationMessage i_ConversationMessage)
         {
+            string nickname = Thread.CurrentPrincipal.Identity.Name;
             using (CarWatchDBEntities entities = new CarWatchDBEntities())
             {
-                List<Message> messages = await entities.Messages.Where(e => e.Time > i_Time.Time).ToListAsync();
+                List<Message> messages = await entities.Messages.Where(e => ((e.Sender == nickname && e.Receiver == i_ConversationMessage.Nickname) || (e.Sender == i_ConversationMessage.Nickname && e.Receiver == nickname)) && e.Time > i_ConversationMessage.Time).ToListAsync();
+                messages.Sort(new MessageComparer());
                 return Ok(messages);
             }
         }

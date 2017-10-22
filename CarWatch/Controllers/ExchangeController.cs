@@ -161,7 +161,7 @@ namespace CarWatch.Controllers
                 Exchange result = await entities.Exchanges.FirstOrDefaultAsync(e => e.ConsumerNickname == nickname && e.Status == 0);
                 if (result == null)
                 {
-                    return BadRequest("you are not involved with an open exchange");
+                    return BadRequest("you are not involved with an open exchange.");
                 }
                 result.Status = i_Status.status;
                 DateTime timeUtc = DateTime.UtcNow;
@@ -194,7 +194,7 @@ namespace CarWatch.Controllers
                 Exchange result = await entities.Exchanges.FirstOrDefaultAsync(e => e.ConsumerNickname == nickname && e.Status == 0);
                 if (result == null)
                 {
-                    return BadRequest("you are not involved with an open exchange");
+                    return BadRequest("you are not involved with an open exchange.");
                 }
                 result.DriverLongitude = i_Point.Longitude;
                 result.DriverLatitude = i_Point.Latitude;
@@ -213,7 +213,7 @@ namespace CarWatch.Controllers
                 Exchange result = await entities.Exchanges.FirstOrDefaultAsync(e => e.ProviderNickname == nickname && e.Status == 0);
                 if (result == null)
                 {
-                    return BadRequest("you are not involved with an open exchange");
+                    return BadRequest("you are not involved with an open exchange.");
                 }
                 Point point = new Point();
                 point.Longitude = result.DriverLongitude;
@@ -232,7 +232,7 @@ namespace CarWatch.Controllers
                 Exchange result = await entities.Exchanges.FirstOrDefaultAsync(e => (e.ProviderNickname == nickname || e.ConsumerNickname == nickname) && e.Status == 0);
                 if (result == null)
                 {
-                    return BadRequest("you are not involved with an open exchange");
+                    return BadRequest("you are not involved with an open exchange.");
                 }
                 pushToClient(result.ConsumerNickname);
                 pushToClient(result.ProviderNickname);
