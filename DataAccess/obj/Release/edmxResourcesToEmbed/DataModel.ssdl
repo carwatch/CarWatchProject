@@ -31,6 +31,7 @@
     <Property Name="Nickname" Type="nvarchar" MaxLength="50" Nullable="false" />
     <Property Name="LicensePlate" Type="nvarchar" MaxLength="50" />
     <Property Name="Rank" Type="float" Nullable="false" />
+    <Property Name="IsOnline" Type="int" />
   </EntityType>
   <EntityType Name="Message">
     <Key>

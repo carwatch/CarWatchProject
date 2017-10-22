@@ -16,6 +16,8 @@ namespace CarWatch.Controllers
     {
         private string k_TheServer = "TheServer";
         private string k_LicensePlateNotFound = "This license plate is not registered";
+        private int k_AmountOfMessagesToUser = 30;
+        private int k_OfflineStatus = 0;
         private HttpClient client = new HttpClient();
 
         public MessageController()
@@ -35,6 +37,11 @@ namespace CarWatch.Controllers
         {
             public string LicensePlate { get; set; }
             public string Content { get; set; }
+        }
+
+        public class DateTimeWrapper
+        {
+            public DateTime Time { get; set; }
         }
 
         [BasicAuthentication]
@@ -58,9 +65,13 @@ namespace CarWatch.Controllers
                 TimeZoneInfo iLZone = TimeZoneInfo.FindSystemTimeZoneById("Israel Standard Time");
                 i_Message.Time = TimeZoneInfo.ConvertTimeFromUtc(timeUtc, iLZone);
                 entities.Messages.Add(i_Message);
-                TodoItem todoItem = new TodoItem();
-                todoItem.Text = i_Message.Sender + ";" + account.Nickname + ";sendChatMessage;" + i_Message.Content;
-                var response = await client.PostAsJsonAsync("tables/TodoItem/PostTodoItem?ZUMO-API-VERSION=2.0.0", todoItem);
+                if (account.IsOnline == k_OfflineStatus)
+                {
+                    TodoItem todoItem = new TodoItem();
+                    todoItem.Text = i_Message.Sender + ";" + account.Nickname + ";sendChatMessage;" + i_Message.Content;
+                    var response = await client.PostAsJsonAsync("tables/TodoItem/PostTodoItem?ZUMO-API-VERSION=2.0.0", todoItem);
+                    
+                }
                 await entities.SaveChangesAsync();
                 return Ok();
             }
@@ -150,6 +161,41 @@ namespace CarWatch.Controllers
                     fbList.Add(account);
                 }
                 return Ok(fbList);
+            }
+        }
+
+        [BasicAuthentication]
+        [HttpPost]
+        public async Task<IHttpActionResult> GetMessageHistoryByTime([FromBody] DateTimeWrapper i_Time)
+        {
+            using (CarWatchDBEntities entities = new CarWatchDBEntities())
+            {
+                List<Message> messages = await entities.Messages.Where(e => e.Time < i_Time.Time).ToListAsync();
+                int startingIndex, amountToRetrieve;
+                if (messages.Count < k_AmountOfMessagesToUser)
+                {
+                    startingIndex = 0;
+                    amountToRetrieve = messages.Count;
+                }
+                else
+                {
+                    startingIndex = messages.Count - k_AmountOfMessagesToUser;
+                    amountToRetrieve = k_AmountOfMessagesToUser;
+                }
+                
+                List<Message> messagesToUser = messages.GetRange(startingIndex, amountToRetrieve);
+                return Ok(messagesToUser);
+            }
+        }
+
+        [BasicAuthentication]
+        [HttpPost]
+        public async Task<IHttpActionResult> GetUnreadMessages([FromBody] DateTimeWrapper i_Time)
+        {
+            using (CarWatchDBEntities entities = new CarWatchDBEntities())
+            {
+                List<Message> messages = await entities.Messages.Where(e => e.Time > i_Time.Time).ToListAsync();
+                return Ok(messages);
             }
         }
     }

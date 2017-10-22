@@ -7,11 +7,17 @@ using System.Web.Http;
 using DataAccess;
 using System.Threading.Tasks;
 using System.Data.Entity;
+using System.Threading;
 
 namespace CarWatch.Controllers
 {
     public class AccountController : ApiController
     {
+        public class UserOnlineStatus
+        {
+            public int Status { get; set; }
+        }
+
         public static bool Authenticate(string i_Nickname, string i_SID)
         {
             using (CarWatchDBEntities entities = new CarWatchDBEntities())
@@ -111,6 +117,24 @@ namespace CarWatch.Controllers
                 }
                 var result = await entities.FacebookAccounts.Where(e => e.Nickname == i_Account.Nickname).FirstOrDefaultAsync();
                 result.LicensePlate = i_Account.LicensePlate;
+                await entities.SaveChangesAsync();
+                return Ok();
+            }
+        }
+
+        [BasicAuthentication]
+        [HttpPost]
+        public async Task<IHttpActionResult> SetIsOnline([FromBody] UserOnlineStatus i_Status)
+        {
+            string nickname = Thread.CurrentPrincipal.Identity.Name;
+            using (CarWatchDBEntities entities = new CarWatchDBEntities())
+            {
+                FacebookAccount account = await entities.FacebookAccounts.FirstOrDefaultAsync(e => e.Nickname == nickname);
+                if(account == null)
+                {
+                    return BadRequest("This nickname is not registered.");
+                }
+                account.IsOnline = i_Status.Status;
                 await entities.SaveChangesAsync();
                 return Ok();
             }

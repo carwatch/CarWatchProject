@@ -18,5 +18,6 @@ namespace DataAccess
         public string Nickname { get; set; }
         public string LicensePlate { get; set; }
         public double Rank { get; set; }
+        public Nullable<int> IsOnline { get; set; }
     }
 }
