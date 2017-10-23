@@ -17,7 +17,7 @@ namespace CarWatch.Controllers
     public class ExchangeController : ApiController
     {
         private string k_TheServer = "TheServer";
-        private string k_ExchangeCancelMessage = "The exchange has been canceled.";
+        private string k_ExchangeCancelMessage = "החלפת החניה בוטלה";
         private HttpClient client = new HttpClient();
 
         public ExchangeController()
