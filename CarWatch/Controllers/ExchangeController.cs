@@ -18,6 +18,8 @@ namespace CarWatch.Controllers
     {
         private string k_TheServer = "TheServer";
         private string k_ExchangeCancelMessage = "החלפת החניה בוטלה";
+        private string k_MessageToProposer = "בדקה הקרובה יגיע הנהג";
+        private string k_MessageToSearcher = "בדקה הקרובה תגיעו לחניה";
         private HttpClient client = new HttpClient();
 
         public ExchangeController()
@@ -234,19 +236,37 @@ namespace CarWatch.Controllers
                 {
                     return BadRequest("you are not involved with an open exchange.");
                 }
-                pushToClient(result.ConsumerNickname);
-                pushToClient(result.ProviderNickname);
+                pushToClient(result.ConsumerNickname, "sendExchangeCancel", k_ExchangeCancelMessage);
+                pushToClient(result.ProviderNickname, "sendExchangeCancel", k_ExchangeCancelMessage);
                 entities.Exchanges.Remove(result);
                 await entities.SaveChangesAsync();
                 return Ok();
             }
         }
 
-        private async void pushToClient(string i_Nickname)
+        private async void pushToClient(string i_Nickname, string i_MethodName, string i_Message)
         {
             TodoItem todoItem = new TodoItem();
-            todoItem.Text = k_TheServer + ";" + i_Nickname + ";send;" + k_ExchangeCancelMessage;
+            todoItem.Text = k_TheServer + ";" + i_Nickname + ";" + i_MethodName + ";" + i_Message;
             var response = await client.PostAsJsonAsync("tables/TodoItem/PostTodoItem?ZUMO-API-VERSION=2.0.0", todoItem);
+        }
+
+        [BasicAuthentication]
+        [HttpPost]
+        public async Task<IHttpActionResult> SendProximityAlert(Object obj)
+        {
+            string nickname = Thread.CurrentPrincipal.Identity.Name;
+            using (CarWatchDBEntities entities = new CarWatchDBEntities())
+            {
+                Exchange result = await entities.Exchanges.FirstOrDefaultAsync(e => (e.ProviderNickname == nickname || e.ConsumerNickname == nickname) && e.Status == 0);
+                if (result == null)
+                {
+                    return BadRequest("you are not involved with an open exchange.");
+                }
+                pushToClient(result.ConsumerNickname, "sendExchangeAlert", k_MessageToSearcher);
+                pushToClient(result.ProviderNickname, "sendExchangeAlert", k_MessageToProposer);
+                return Ok();
+            }
         }
     }
 }
