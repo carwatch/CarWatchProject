@@ -186,6 +186,8 @@ namespace CarWatch.Controllers
             string nickname = Thread.CurrentPrincipal.Identity.Name;
             using (CarWatchDBEntities entities = new CarWatchDBEntities())
             {
+                TimeZoneInfo iLZone = TimeZoneInfo.FindSystemTimeZoneById("Israel Standard Time");
+                i_ConversationMessage.Time = TimeZoneInfo.ConvertTimeFromUtc(i_ConversationMessage.Time, iLZone);
                 List<Message> messages = await entities.Messages.Where(e => ((e.Sender == nickname && e.Receiver == i_ConversationMessage.Nickname) || (e.Sender == i_ConversationMessage.Nickname && e.Receiver == nickname)) && e.Time < i_ConversationMessage.Time).ToListAsync();
                 int startingIndex, amountToRetrieve;
                 if (messages.Count < k_AmountOfMessagesToUser)
@@ -211,6 +213,8 @@ namespace CarWatch.Controllers
             string nickname = Thread.CurrentPrincipal.Identity.Name;
             using (CarWatchDBEntities entities = new CarWatchDBEntities())
             {
+                TimeZoneInfo iLZone = TimeZoneInfo.FindSystemTimeZoneById("Israel Standard Time");
+                i_ConversationMessage.Time = TimeZoneInfo.ConvertTimeFromUtc(i_ConversationMessage.Time, iLZone);
                 List<Message> messages = await entities.Messages.Where(e => ((e.Sender == nickname && e.Receiver == i_ConversationMessage.Nickname) || (e.Sender == i_ConversationMessage.Nickname && e.Receiver == nickname)) && e.Time > i_ConversationMessage.Time).ToListAsync();
                 messages.Sort(new MessageComparer());
                 return Ok(messages);
