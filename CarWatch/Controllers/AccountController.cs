@@ -18,6 +18,11 @@ namespace CarWatch.Controllers
             public int Status { get; set; }
         }
 
+        public class ChatPartner
+        {
+            public string Partner { get; set; }
+        }
+
         public static bool Authenticate(string i_Nickname, string i_SID)
         {
             using (CarWatchDBEntities entities = new CarWatchDBEntities())
@@ -135,6 +140,24 @@ namespace CarWatch.Controllers
                     return BadRequest("This nickname is not registered.");
                 }
                 account.IsOnline = i_Status.Status;
+                await entities.SaveChangesAsync();
+                return Ok();
+            }
+        }
+
+        [BasicAuthentication]
+        [HttpPost]
+        public async Task<IHttpActionResult> SetChatPartner([FromBody] ChatPartner i_Partner)
+        {
+            string nickname = Thread.CurrentPrincipal.Identity.Name;
+            using (CarWatchDBEntities entities = new CarWatchDBEntities())
+            {
+                FacebookAccount account = await entities.FacebookAccounts.FirstOrDefaultAsync(e => e.Nickname == nickname);
+                if (account == null)
+                {
+                    return BadRequest("This nickname is not registered.");
+                }
+                account.ChatPartner = i_Partner.Partner;
                 await entities.SaveChangesAsync();
                 return Ok();
             }
