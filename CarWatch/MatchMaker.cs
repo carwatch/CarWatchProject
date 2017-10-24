@@ -1,10 +1,9 @@
 ﻿using DataAccess;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Data.Entity.SqlServer;
 using System.Data.Entity;
+using System.Data.Entity.SqlServer;
+using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 
@@ -78,9 +77,6 @@ namespace CarWatch
             exchange.Street = i_Proposal.Street;
             exchange.StreetNumber = i_Proposal.StreetNumber;
             exchange.TimeOpened = i_Search.TimeOpened;
-            /*DateTime timeUtc = DateTime.UtcNow;
-            TimeZoneInfo iLZone = TimeZoneInfo.FindSystemTimeZoneById("Israel Standard Time");
-            exchange.TimeMatched = TimeZoneInfo.ConvertTimeFromUtc(timeUtc, iLZone);*/
             exchange.TimeMatched = DateTime.UtcNow;
             exchange.TimeExchanged = exchange.TimeMatched;
             exchange.Status = 0;

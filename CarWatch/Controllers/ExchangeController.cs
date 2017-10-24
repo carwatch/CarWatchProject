@@ -1,16 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
-using System.Web.Http;
-using DataAccess;
-using System.Threading.Tasks;
+﻿using DataAccess;
+using System;
 using System.Data.Entity;
-using System.Timers;
-using System.Data.Entity.SqlServer;
-using System.Threading;
+using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Threading;
+using System.Threading.Tasks;
+using System.Web.Http;
 
 namespace CarWatch.Controllers
 {
@@ -68,9 +63,6 @@ namespace CarWatch.Controllers
                 {
                     entities.Searches.Remove(result);
                 }
-                /*DateTime timeUtc = DateTime.UtcNow;
-                TimeZoneInfo iLZone = TimeZoneInfo.FindSystemTimeZoneById("Israel Standard Time");
-                i_ParkingSpotSearch.TimeOpened = TimeZoneInfo.ConvertTimeFromUtc(timeUtc, iLZone);*/
                 i_ParkingSpotSearch.TimeOpened = DateTime.UtcNow;
                 entities.Searches.Add(i_ParkingSpotSearch);
                 await entities.SaveChangesAsync();
@@ -125,9 +117,6 @@ namespace CarWatch.Controllers
                 {
                     entities.Proposals.Remove(result);
                 }
-                /*DateTime timeUtc = DateTime.UtcNow;
-                TimeZoneInfo iLZone = TimeZoneInfo.FindSystemTimeZoneById("Israel Standard Time");
-                i_ParkingSpotProposal.TimeOpened = TimeZoneInfo.ConvertTimeFromUtc(timeUtc, iLZone);*/
                 i_ParkingSpotProposal.TimeOpened = DateTime.UtcNow;
                 entities.Proposals.Add(i_ParkingSpotProposal);
                 await entities.SaveChangesAsync();
@@ -204,9 +193,6 @@ namespace CarWatch.Controllers
                     return BadRequest("Illegal status code.");
                 }
                 result.Status = i_Status.status;
-                /*DateTime timeUtc = DateTime.UtcNow;
-                TimeZoneInfo iLZone = TimeZoneInfo.FindSystemTimeZoneById("Israel Standard Time");
-                result.TimeExchanged = TimeZoneInfo.ConvertTimeFromUtc(timeUtc, iLZone);*/
                 result.TimeExchanged = DateTime.UtcNow;
                 await entities.SaveChangesAsync();
                 return Ok(result);

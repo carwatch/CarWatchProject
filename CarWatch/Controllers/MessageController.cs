@@ -1,15 +1,13 @@
-﻿using System;
+﻿using DataAccess;
+using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
-using System.Net;
 using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Web.Http;
-using DataAccess;
-using System.Data.Entity;
-using System.Threading;
-using System.Net.Http.Headers;
-using System.Collections;
 
 namespace CarWatch.Controllers
 {
@@ -76,9 +74,6 @@ namespace CarWatch.Controllers
                 {
                     return BadRequest("The receiver nickname was not found.");
                 }
-                /*DateTime timeUtc = DateTime.UtcNow;
-                TimeZoneInfo iLZone = TimeZoneInfo.FindSystemTimeZoneById("Israel Standard Time");
-                i_Message.Time = TimeZoneInfo.ConvertTimeFromUtc(timeUtc, iLZone);*/
                 i_Message.Time = DateTime.UtcNow;
                 entities.Messages.Add(i_Message);
                 if(account.ChatPartner != i_Message.Sender)
@@ -112,9 +107,6 @@ namespace CarWatch.Controllers
                     await client.PostAsJsonAsync("tables/TodoItem/PostTodoItem?ZUMO-API-VERSION=2.0.0", todoItem);
                     return BadRequest(k_LicensePlateNotFound);
                 }
-                /*DateTime timeUtc = DateTime.UtcNow;
-                TimeZoneInfo iLZone = TimeZoneInfo.FindSystemTimeZoneById("Israel Standard Time");
-                i_Message.Time = TimeZoneInfo.ConvertTimeFromUtc(timeUtc, iLZone);*/
                 i_Message.Time = DateTime.UtcNow;
                 i_Message.Receiver = account.Nickname;
                 entities.Messages.Add(i_Message);
@@ -122,23 +114,6 @@ namespace CarWatch.Controllers
                 var response = await client.PostAsJsonAsync("tables/TodoItem/PostTodoItem?ZUMO-API-VERSION=2.0.0", todoItem);
                 await entities.SaveChangesAsync();
                 return Ok();
-            }
-        }
-
-        [BasicAuthentication]
-        [HttpPost]
-        public async Task<IHttpActionResult> GetMessagesHistory([FromBody] MessageDetails i_Message)
-        {
-            string nickname = Thread.CurrentPrincipal.Identity.Name;
-            if (i_Message.Sender != nickname)
-            {
-                return BadRequest("Nicknames do not match.");
-            }
-
-            using (CarWatchDBEntities entities = new CarWatchDBEntities())
-            {
-                List<Message> result = await entities.Messages.Where(e => (e.Sender == i_Message.Sender && e.Receiver == i_Message.Receiver) || (e.Sender == i_Message.Receiver && e.Receiver == i_Message.Sender)).ToListAsync();
-                return Ok(result);
             }
         }
 
