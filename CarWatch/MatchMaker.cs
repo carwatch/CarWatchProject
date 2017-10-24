@@ -78,9 +78,10 @@ namespace CarWatch
             exchange.Street = i_Proposal.Street;
             exchange.StreetNumber = i_Proposal.StreetNumber;
             exchange.TimeOpened = i_Search.TimeOpened;
-            DateTime timeUtc = DateTime.UtcNow;
+            /*DateTime timeUtc = DateTime.UtcNow;
             TimeZoneInfo iLZone = TimeZoneInfo.FindSystemTimeZoneById("Israel Standard Time");
-            exchange.TimeMatched = TimeZoneInfo.ConvertTimeFromUtc(timeUtc, iLZone);
+            exchange.TimeMatched = TimeZoneInfo.ConvertTimeFromUtc(timeUtc, iLZone);*/
+            exchange.TimeMatched = DateTime.UtcNow;
             exchange.TimeExchanged = exchange.TimeMatched;
             exchange.Status = 0;
             exchange.DriverLongitude = i_Search.Longitude;

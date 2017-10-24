@@ -1,0 +1,88 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="CarWatchDBModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="Exchange">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="ProviderNickname" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="ConsumerNickname" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="ProviderLicensePlate" Type="String" MaxLength="15" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="ConsumerLicensePlate" Type="String" MaxLength="15" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="Location" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="Longitude" Type="Double" Nullable="false" />
+    <Property Name="Latitude" Type="Double" Nullable="false" />
+    <Property Name="Country" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="City" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="Street" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="StreetNumber" Type="Int32" Nullable="false" />
+    <Property Name="TimeOpened" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="TimeMatched" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="TimeExchanged" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="Status" Type="Int32" Nullable="false" />
+    <Property Name="DriverLongitude" Type="Double" Nullable="false" />
+    <Property Name="DriverLatitude" Type="Double" Nullable="false" />
+  </EntityType>
+  <EntityType Name="FacebookAccount">
+    <Key>
+      <PropertyRef Name="FacebookSID" />
+    </Key>
+    <Property Name="FacebookSID" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="Nickname" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="LicensePlate" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Rank" Type="Double" Nullable="false" />
+    <Property Name="IsOnline" Type="Int32" />
+    <Property Name="ChatPartner" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+  </EntityType>
+  <EntityType Name="Message">
+    <Key>
+      <PropertyRef Name="Sender" />
+      <PropertyRef Name="Receiver" />
+      <PropertyRef Name="Time" />
+    </Key>
+    <Property Name="Sender" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="Receiver" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="Time" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="Content" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Proposal">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Nickname" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="LicensePlate" Type="String" MaxLength="15" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="Location" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="Longitude" Type="Double" Nullable="false" />
+    <Property Name="Latitude" Type="Double" Nullable="false" />
+    <Property Name="Country" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="City" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="Street" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="StreetNumber" Type="Int32" Nullable="false" />
+    <Property Name="TimeOpened" Type="DateTime" Nullable="false" Precision="3" />
+  </EntityType>
+  <EntityType Name="Search">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Nickname" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="LicensePlate" Type="String" MaxLength="15" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="Location" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="Longitude" Type="Double" Nullable="false" />
+    <Property Name="Latitude" Type="Double" Nullable="false" />
+    <Property Name="Country" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="City" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="Street" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="StreetNumber" Type="Int32" Nullable="false" />
+    <Property Name="TimeOpened" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="Distance" Type="Int32" Nullable="false" />
+  </EntityType>
+  <EntityContainer Name="CarWatchDBEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="Exchanges" EntityType="Self.Exchange" />
+    <EntitySet Name="FacebookAccounts" EntityType="Self.FacebookAccount" />
+    <EntitySet Name="Messages" EntityType="Self.Message" />
+    <EntitySet Name="Proposals" EntityType="Self.Proposal" />
+    <EntitySet Name="Searches" EntityType="Self.Search" />
+  </EntityContainer>
+</Schema>

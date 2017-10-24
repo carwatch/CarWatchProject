@@ -76,9 +76,10 @@ namespace CarWatch.Controllers
                 {
                     return BadRequest("The receiver nickname was not found.");
                 }
-                DateTime timeUtc = DateTime.UtcNow;
+                /*DateTime timeUtc = DateTime.UtcNow;
                 TimeZoneInfo iLZone = TimeZoneInfo.FindSystemTimeZoneById("Israel Standard Time");
-                i_Message.Time = TimeZoneInfo.ConvertTimeFromUtc(timeUtc, iLZone);
+                i_Message.Time = TimeZoneInfo.ConvertTimeFromUtc(timeUtc, iLZone);*/
+                i_Message.Time = DateTime.UtcNow;
                 entities.Messages.Add(i_Message);
                 if(account.ChatPartner != i_Message.Sender)
                 {
@@ -111,9 +112,10 @@ namespace CarWatch.Controllers
                     await client.PostAsJsonAsync("tables/TodoItem/PostTodoItem?ZUMO-API-VERSION=2.0.0", todoItem);
                     return BadRequest(k_LicensePlateNotFound);
                 }
-                DateTime timeUtc = DateTime.UtcNow;
+                /*DateTime timeUtc = DateTime.UtcNow;
                 TimeZoneInfo iLZone = TimeZoneInfo.FindSystemTimeZoneById("Israel Standard Time");
-                i_Message.Time = TimeZoneInfo.ConvertTimeFromUtc(timeUtc, iLZone);
+                i_Message.Time = TimeZoneInfo.ConvertTimeFromUtc(timeUtc, iLZone);*/
+                i_Message.Time = DateTime.UtcNow;
                 i_Message.Receiver = account.Nickname;
                 entities.Messages.Add(i_Message);
                 todoItem.Text = i_Message.Sender + ";" + account.Nickname + ";sendToLicense;" + i_Message.Content;
@@ -186,8 +188,6 @@ namespace CarWatch.Controllers
             string nickname = Thread.CurrentPrincipal.Identity.Name;
             using (CarWatchDBEntities entities = new CarWatchDBEntities())
             {
-                TimeZoneInfo iLZone = TimeZoneInfo.FindSystemTimeZoneById("Israel Standard Time");
-                i_ConversationMessage.Time = TimeZoneInfo.ConvertTimeFromUtc(i_ConversationMessage.Time, iLZone);
                 List<Message> messages = await entities.Messages.Where(e => ((e.Sender == nickname && e.Receiver == i_ConversationMessage.Nickname) || (e.Sender == i_ConversationMessage.Nickname && e.Receiver == nickname)) && e.Time < i_ConversationMessage.Time).ToListAsync();
                 int startingIndex, amountToRetrieve;
                 if (messages.Count < k_AmountOfMessagesToUser)
@@ -213,8 +213,6 @@ namespace CarWatch.Controllers
             string nickname = Thread.CurrentPrincipal.Identity.Name;
             using (CarWatchDBEntities entities = new CarWatchDBEntities())
             {
-                TimeZoneInfo iLZone = TimeZoneInfo.FindSystemTimeZoneById("Israel Standard Time");
-                i_ConversationMessage.Time = TimeZoneInfo.ConvertTimeFromUtc(i_ConversationMessage.Time, iLZone);
                 List<Message> messages = await entities.Messages.Where(e => ((e.Sender == nickname && e.Receiver == i_ConversationMessage.Nickname) || (e.Sender == i_ConversationMessage.Nickname && e.Receiver == nickname)) && e.Time > i_ConversationMessage.Time).ToListAsync();
                 messages.Sort(new MessageComparer());
                 return Ok(messages);
