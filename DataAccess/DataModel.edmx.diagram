@@ -4,7 +4,7 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="61bf1d08d0814ea680de65cc9389a25d" Name="Diagram1">
+      <Diagram DiagramId="f447f82b551c45f9934b0bab233f20af" Name="Diagram1">
         <EntityTypeShape EntityType="CarWatchDBModel.Exchange" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
         <EntityTypeShape EntityType="CarWatchDBModel.FacebookAccount" Width="1.5" PointX="2.75" PointY="0.75" IsExpanded="true" />
         <EntityTypeShape EntityType="CarWatchDBModel.Message" Width="1.5" PointX="2.75" PointY="3.75" IsExpanded="true" />

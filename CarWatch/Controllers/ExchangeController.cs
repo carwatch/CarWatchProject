@@ -17,9 +17,20 @@ namespace CarWatch.Controllers
     public class ExchangeController : ApiController
     {
         private string k_TheServer = "TheServer";
-        private string k_ExchangeCancelMessage = "החלפת החניה בוטלה";
         private string k_MessageToProposer = "בדקה הקרובה יגיע הנהג";
         private string k_MessageToSearcher = "בדקה הקרובה תגיעו לחניה";
+        private string k_ExchangeSuccessMessage = "החלפת החניה בוצעה בהצלחה";
+        private string k_ExchangeCancelByProposerMessage = "מציע החניה ביטל את ההחלפה";
+        private string k_ExchangeCancelBySearcherMessage = "מחפש החניה ביטל את ההחלפה";
+        private string k_ExchangeCancelNoParkingSpotMessage = "החלפת החניה בוטלה, החניה לא פונתה בזמן";
+
+        enum e_ExchangeStatus
+        {
+            Success = 1,
+            CanceledBySearcherPriorArrival = 2,
+            CanceledByProposerPriorArrival = 3,
+            CancelNoParkingSpot = 4};
+
         private HttpClient client = new HttpClient();
 
         public ExchangeController()
@@ -160,10 +171,35 @@ namespace CarWatch.Controllers
             string nickname = Thread.CurrentPrincipal.Identity.Name;
             using (CarWatchDBEntities entities = new CarWatchDBEntities())
             {
-                Exchange result = await entities.Exchanges.FirstOrDefaultAsync(e => e.ConsumerNickname == nickname && e.Status == 0);
+                Exchange result = await entities.Exchanges.FirstOrDefaultAsync(e => (e.ConsumerNickname == nickname || e.ProviderNickname == nickname) && e.Status == 0);
                 if (result == null)
                 {
                     return BadRequest("you are not involved with an open exchange.");
+                }
+
+                if(i_Status.status == (int)e_ExchangeStatus.Success)
+                {
+                    pushToClient(result.ConsumerNickname, "exchageStatusUpdate", k_ExchangeSuccessMessage);
+                    pushToClient(result.ProviderNickname, "exchageStatusUpdate", k_ExchangeSuccessMessage);
+                }
+                else if (i_Status.status == (int)e_ExchangeStatus.CanceledBySearcherPriorArrival)
+                {
+                    pushToClient(result.ConsumerNickname, "exchageStatusUpdate", k_ExchangeCancelBySearcherMessage);
+                    pushToClient(result.ProviderNickname, "exchageStatusUpdate", k_ExchangeCancelBySearcherMessage);
+                }
+                else if (i_Status.status == (int)e_ExchangeStatus.CanceledByProposerPriorArrival)
+                {
+                    pushToClient(result.ConsumerNickname, "exchageStatusUpdate", k_ExchangeCancelByProposerMessage);
+                    pushToClient(result.ProviderNickname, "exchageStatusUpdate", k_ExchangeCancelByProposerMessage);
+                }
+                else if(i_Status.status == (int)e_ExchangeStatus.CancelNoParkingSpot)
+                {
+                    pushToClient(result.ConsumerNickname, "exchageStatusUpdate", k_ExchangeCancelNoParkingSpotMessage);
+                    pushToClient(result.ProviderNickname, "exchageStatusUpdate", k_ExchangeCancelNoParkingSpotMessage);
+                }
+                else
+                {
+                    return BadRequest("Illegal status code.");
                 }
                 result.Status = i_Status.status;
                 DateTime timeUtc = DateTime.UtcNow;
@@ -221,26 +257,6 @@ namespace CarWatch.Controllers
                 point.Longitude = result.DriverLongitude;
                 point.Latitude = result.DriverLatitude;
                 return Ok(point);
-            }
-        }
-
-        [BasicAuthentication]
-        [HttpPost]
-        public async Task<IHttpActionResult> CancelExchange(Object obj)
-        {
-            string nickname = Thread.CurrentPrincipal.Identity.Name;
-            using (CarWatchDBEntities entities = new CarWatchDBEntities())
-            {
-                Exchange result = await entities.Exchanges.FirstOrDefaultAsync(e => (e.ProviderNickname == nickname || e.ConsumerNickname == nickname) && e.Status == 0);
-                if (result == null)
-                {
-                    return BadRequest("you are not involved with an open exchange.");
-                }
-                pushToClient(result.ConsumerNickname, "sendExchangeCancel", k_ExchangeCancelMessage);
-                pushToClient(result.ProviderNickname, "sendExchangeCancel", k_ExchangeCancelMessage);
-                entities.Exchanges.Remove(result);
-                await entities.SaveChangesAsync();
-                return Ok();
             }
         }
 

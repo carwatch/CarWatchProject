@@ -5,7 +5,7 @@ VisualStudioVersion = 15.0.26430.12
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CarWatch", "CarWatch\CarWatch.csproj", "{0A457EF5-00FE-4D1B-AF12-D26A8DF857FF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataAccess", "DataAccess\DataAccess.csproj", "{1606188E-AB98-43F8-A858-C30A21DB9316}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataAccess", "DataAccess\DataAccess.csproj", "{0496797E-0EDA-4D9D-BEB7-DC56F4ED9D34}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,10 +17,10 @@ Global
 		{0A457EF5-00FE-4D1B-AF12-D26A8DF857FF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0A457EF5-00FE-4D1B-AF12-D26A8DF857FF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0A457EF5-00FE-4D1B-AF12-D26A8DF857FF}.Release|Any CPU.Build.0 = Release|Any CPU
-		{1606188E-AB98-43F8-A858-C30A21DB9316}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{1606188E-AB98-43F8-A858-C30A21DB9316}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{1606188E-AB98-43F8-A858-C30A21DB9316}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{1606188E-AB98-43F8-A858-C30A21DB9316}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0496797E-0EDA-4D9D-BEB7-DC56F4ED9D34}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0496797E-0EDA-4D9D-BEB7-DC56F4ED9D34}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0496797E-0EDA-4D9D-BEB7-DC56F4ED9D34}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0496797E-0EDA-4D9D-BEB7-DC56F4ED9D34}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

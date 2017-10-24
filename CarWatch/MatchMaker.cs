@@ -13,7 +13,6 @@ namespace CarWatch
     public class MatchMaker
     {
         private string k_TheServer = "TheServer";
-        //private string k_MatchFoundMessage = "A match has been found!";
         private string k_ProposerMessage = "נמצא מחפש חניה!";
         private string k_SearcherMessage = "נמצאה חניה!";
         private int k_EarthRadius = 6371;
@@ -63,34 +62,6 @@ namespace CarWatch
                 }
             }
         }
-        
-        /*private async void findMatch(Proposal i_Proposal, CarWatchDBEntities entities)
-        {
-            List<Search> searchList = await entities.Searches.Where(
-                e => 2 * k_EarthRadius * (SqlFunctions.SquareRoot(SqlFunctions.Square(SqlFunctions.Sin((SqlFunctions.Radians(i_Proposal.Latitude) - SqlFunctions.Radians(e.Latitude)) / 2)) + SqlFunctions.Cos(SqlFunctions.Radians(i_Proposal.Latitude)) * SqlFunctions.Cos(SqlFunctions.Radians(e.Latitude)) * SqlFunctions.Square(SqlFunctions.Sin((SqlFunctions.Radians(i_Proposal.Longitude) - SqlFunctions.Radians(e.Longitude)) / 2)))) <= e.Distance).ToListAsync();
-            if (searchList.Count > 0)
-            {
-                Search searchToRemove = searchList[0];
-                var firstAccountNickname = searchList[0].Nickname;
-                var parkingSpotMatch = await entities.FacebookAccounts.FirstOrDefaultAsync(e => e.Nickname.CompareTo(firstAccountNickname) == 0);
-                foreach (var item in searchList)
-                {
-                    var account = await entities.FacebookAccounts.FirstOrDefaultAsync(e => e.Nickname.CompareTo(item.Nickname) == 0);
-                    if (account.Rank > parkingSpotMatch.Rank)
-                    {
-                        parkingSpotMatch = account;
-                        searchToRemove = item;
-                    }
-                }
-
-                Exchange exchange = createExchangeObject(searchToRemove, i_Proposal);
-                entities.Exchanges.Add(exchange);
-                entities.Searches.Remove(searchToRemove);
-                entities.Proposals.Remove(i_Proposal);
-                await entities.SaveChangesAsync();
-                sendPushNotifications(searchToRemove, i_Proposal);
-            }
-        }*/
 
         private Exchange createExchangeObject(Search i_Search, Proposal i_Proposal)
         {

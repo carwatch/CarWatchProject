@@ -37,6 +37,7 @@
           <Property Name="LicensePlate" Type="nvarchar" MaxLength="50" />
           <Property Name="Rank" Type="float" Nullable="false" />
           <Property Name="IsOnline" Type="int" />
+          <Property Name="ChatPartner" Type="nvarchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="Message">
           <Key>
@@ -126,6 +127,7 @@
           <Property Name="LicensePlate" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Rank" Type="Double" Nullable="false" />
           <Property Name="IsOnline" Type="Int32" />
+          <Property Name="ChatPartner" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="Message">
           <Key>
@@ -216,6 +218,7 @@
                 <ScalarProperty Name="LicensePlate" ColumnName="LicensePlate" />
                 <ScalarProperty Name="Rank" ColumnName="Rank" />
                 <ScalarProperty Name="IsOnline" ColumnName="IsOnline" />
+                <ScalarProperty Name="ChatPartner" ColumnName="ChatPartner" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
