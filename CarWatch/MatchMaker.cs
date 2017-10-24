@@ -83,6 +83,8 @@ namespace CarWatch
             exchange.TimeMatched = TimeZoneInfo.ConvertTimeFromUtc(timeUtc, iLZone);
             exchange.TimeExchanged = exchange.TimeMatched;
             exchange.Status = 0;
+            exchange.DriverLongitude = i_Search.Longitude;
+            exchange.DriverLatitude = i_Search.Latitude;
             return exchange;
         }
 
