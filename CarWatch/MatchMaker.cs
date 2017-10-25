@@ -66,6 +66,7 @@ namespace CarWatch
                             entities.Proposals.Remove(proposal);
                             await entities.SaveChangesAsync();
                             sendPushNotifications(searchToRemove, proposal);
+                            extendedSearchList.RemoveAt(0);
                             alertOtherSearchers(extendedSearchList, proposal);
                         }
                     }
@@ -127,12 +128,6 @@ namespace CarWatch
             todoItem.Text = k_TheServer + ";" + i_SeacherNickname + ";foundParking;" + i_ProposerLicensePlate + ";" + i_Latitude.ToString() + ";" + i_Longitude.ToString() + ";" + k_SearcherMessage;
             await client.PostAsJsonAsync("tables/TodoItem/PostTodoItem?ZUMO-API-VERSION=2.0.0", todoItem);
         }
-
-        private double calculateScore(DateTime i_Time, double i_Rank)
-        {
-            int minutes = (DateTime.UtcNow - i_Time).Minutes;
-            return (i_Rank * 0.9) + (minutes * 0.1);
-        }
     }
 
     public class TodoItem
@@ -145,14 +140,19 @@ namespace CarWatch
     {
         public int Compare(ExtendedSearch i_ExtendedSearch1, ExtendedSearch i_ExtendedSearch2)
         {
-            double rank1 = (i_ExtendedSearch1.Account.Rank * 0.95) + ((DateTime.UtcNow - i_ExtendedSearch1.Search.TimeOpened).TotalMinutes * 0.05);
-            double rank2 = (i_ExtendedSearch2.Account.Rank * 0.95) + ((DateTime.UtcNow - i_ExtendedSearch2.Search.TimeOpened).TotalMinutes * 0.05);
-            if (rank1 > rank2)
+            double score1 = calculateScore(i_ExtendedSearch1.Search.TimeOpened, i_ExtendedSearch1.Account.Rank);
+            double score2 = calculateScore(i_ExtendedSearch2.Search.TimeOpened, i_ExtendedSearch2.Account.Rank);
+            if (score1 > score2)
                 return 1;
-            else if (rank1 < rank2)
+            else if (score1 < score2)
                 return -1;
             else
                 return 0;
+        }
+
+        private double calculateScore(DateTime i_Time, double i_Rank)
+        {
+            return (i_Rank * 0.95) + (DateTime.UtcNow - i_Time).TotalMinutes;
         }
     }
 
