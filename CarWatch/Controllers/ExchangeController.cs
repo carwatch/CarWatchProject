@@ -172,6 +172,8 @@ namespace CarWatch.Controllers
                 {
                     pushToClient(result.ConsumerNickname, "exchageStatusUpdate", k_ExchangeSuccessMessage);
                     pushToClient(result.ProviderNickname, "exchageStatusUpdate", k_ExchangeSuccessMessage);
+                    FacebookAccount proposer = await entities.FacebookAccounts.FirstOrDefaultAsync(e => e.Nickname == result.ProviderNickname);
+                    proposer.Rank++;
                 }
                 else if (i_Status.status == (int)e_ExchangeStatus.CanceledBySearcherPriorArrival)
                 {
