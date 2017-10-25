@@ -14,8 +14,6 @@ namespace CarWatch
         private string k_TheServer = "TheServer";
         private string k_ProposerMessage = "נמצא מחפש חניה!";
         private string k_SearcherMessage = "נמצאה חניה!";
-        private string k_ParkingSpotTakenMessage = "חניה נתפסה בכתובת ";
-        private string k_RankMessage = "והינך במיקום ה-";
         private int k_EarthRadius = 6371;
         private HttpClient client = new HttpClient();
 
@@ -39,49 +37,28 @@ namespace CarWatch
                                                         e => 2 * k_EarthRadius * (SqlFunctions.SquareRoot(SqlFunctions.Square(SqlFunctions.Sin((SqlFunctions.Radians(proposal.Latitude) - SqlFunctions.Radians(e.Latitude)) / 2)) + SqlFunctions.Cos(SqlFunctions.Radians(proposal.Latitude)) * SqlFunctions.Cos(SqlFunctions.Radians(e.Latitude)) * SqlFunctions.Square(SqlFunctions.Sin((SqlFunctions.Radians(proposal.Longitude) - SqlFunctions.Radians(e.Longitude)) / 2)))) <= e.Distance).ToListAsync();
                         if (searchList.Count > 0)
                         {
-                            List<ExtendedSearch> extendedSearchList = new List<ExtendedSearch>();
-                            foreach(Search search in searchList)
-                            {
-                                FacebookAccount account = await entities.FacebookAccounts.FirstOrDefaultAsync(e => e.Nickname.CompareTo(search.Nickname) == 0);
-                                extendedSearchList.Add(new ExtendedSearch(search, account));
-                            }
-                            extendedSearchList.Sort(new ExtendedSearchComparer());
-                            /*Search searchToRemove = searchList[0];
-                            string firstAccountNickname = searchList[0].Nickname;
-                            FacebookAccount parkingSpotMatch = await entities.FacebookAccounts.FirstOrDefaultAsync(e => e.Nickname.CompareTo(firstAccountNickname) == 0);
+                            Search searchToRemove = searchList[0];
+                            var firstAccountNickname = searchList[0].Nickname;
+                            var parkingSpotMatch = await entities.FacebookAccounts.FirstOrDefaultAsync(e => e.Nickname.CompareTo(firstAccountNickname) == 0);
                             foreach (var item in searchList)
                             {
-                                FacebookAccount account = await entities.FacebookAccounts.FirstOrDefaultAsync(e => e.Nickname.CompareTo(item.Nickname) == 0);
+                                var account = await entities.FacebookAccounts.FirstOrDefaultAsync(e => e.Nickname.CompareTo(item.Nickname) == 0);
                                 if (account.Rank > parkingSpotMatch.Rank)
                                 {
                                     parkingSpotMatch = account;
                                     searchToRemove = item;
                                 }
-                            }*/
-                            
-                            Search searchToRemove = extendedSearchList[0].Search;
+                            }
+
                             Exchange exchange = createExchangeObject(searchToRemove, proposal);
                             entities.Exchanges.Add(exchange);
                             entities.Searches.Remove(searchToRemove);
                             entities.Proposals.Remove(proposal);
                             await entities.SaveChangesAsync();
                             sendPushNotifications(searchToRemove, proposal);
-                            extendedSearchList.RemoveAt(0);
-                            alertOtherSearchers(extendedSearchList, proposal);
                         }
                     }
                 }
-            }
-        }
-
-        private async void alertOtherSearchers(List<ExtendedSearch> i_ExtendedSearchList, Proposal i_Proposal)
-        {
-            int index = 2;
-            foreach(ExtendedSearch extendedSearch in i_ExtendedSearchList)
-            {
-                TodoItem todoItem = new TodoItem();
-                todoItem.Text = k_TheServer + ";" + extendedSearch.Search.Nickname + ";systemMessage;" + k_ParkingSpotTakenMessage + i_Proposal.Location + k_RankMessage + index;
-                await client.PostAsJsonAsync("tables/TodoItem/PostTodoItem?ZUMO-API-VERSION=2.0.0", todoItem);
             }
         }
 
@@ -134,37 +111,5 @@ namespace CarWatch
     {
         public string Text { get; set; }
         public bool Complete { get; set; }
-    }
-
-    public class ExtendedSearchComparer : IComparer<ExtendedSearch>
-    {
-        public int Compare(ExtendedSearch i_ExtendedSearch1, ExtendedSearch i_ExtendedSearch2)
-        {
-            double score1 = calculateScore(i_ExtendedSearch1.Search.TimeOpened, i_ExtendedSearch1.Account.Rank);
-            double score2 = calculateScore(i_ExtendedSearch2.Search.TimeOpened, i_ExtendedSearch2.Account.Rank);
-            if (score1 > score2)
-                return -1;
-            else if (score1 < score2)
-                return 1;
-            else
-                return 0;
-        }
-
-        private double calculateScore(DateTime i_Time, double i_Rank)
-        {
-            return (i_Rank * 0.95) + (DateTime.UtcNow - i_Time).TotalMinutes;
-        }
-    }
-
-    public class ExtendedSearch
-    {
-        public Search Search { get; set; }
-        public FacebookAccount Account { get; set; }
-
-        public ExtendedSearch(Search i_Search, FacebookAccount i_Account)
-        {
-            Search = i_Search;
-            Account = i_Account;
-        }
     }
 }
