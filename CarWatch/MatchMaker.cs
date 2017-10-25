@@ -143,9 +143,9 @@ namespace CarWatch
             double score1 = calculateScore(i_ExtendedSearch1.Search.TimeOpened, i_ExtendedSearch1.Account.Rank);
             double score2 = calculateScore(i_ExtendedSearch2.Search.TimeOpened, i_ExtendedSearch2.Account.Rank);
             if (score1 > score2)
-                return 1;
-            else if (score1 < score2)
                 return -1;
+            else if (score1 < score2)
+                return 1;
             else
                 return 0;
         }
