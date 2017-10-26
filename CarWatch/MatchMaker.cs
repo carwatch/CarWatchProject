@@ -15,7 +15,7 @@ namespace CarWatch
         private string k_ProposerMessage = "נמצא מחפש חניה!";
         private string k_SearcherMessage = "נמצאה חניה!";
         private string k_ParkingSpotTakenMessage = "חניה נתפסה בכתובת ";
-        private string k_RankMessage = "והינך במיקום ה-";
+        private string k_RankMessage = "ומיקומך בתור הוא ";
         private int k_EarthRadius = 6371;
         private HttpClient client = new HttpClient();
 
@@ -46,24 +46,13 @@ namespace CarWatch
                                 extendedSearchList.Add(new ExtendedSearch(search, account));
                             }
                             extendedSearchList.Sort(new ExtendedSearchComparer());
-                            /*Search searchToRemove = searchList[0];
-                            string firstAccountNickname = searchList[0].Nickname;
-                            FacebookAccount parkingSpotMatch = await entities.FacebookAccounts.FirstOrDefaultAsync(e => e.Nickname.CompareTo(firstAccountNickname) == 0);
-                            foreach (var item in searchList)
-                            {
-                                FacebookAccount account = await entities.FacebookAccounts.FirstOrDefaultAsync(e => e.Nickname.CompareTo(item.Nickname) == 0);
-                                if (account.Rank > parkingSpotMatch.Rank)
-                                {
-                                    parkingSpotMatch = account;
-                                    searchToRemove = item;
-                                }
-                            }*/
-                            
                             Search searchToRemove = extendedSearchList[0].Search;
                             Exchange exchange = createExchangeObject(searchToRemove, proposal);
                             entities.Exchanges.Add(exchange);
                             entities.Searches.Remove(searchToRemove);
                             entities.Proposals.Remove(proposal);
+                            FacebookAccount proposerAccount = await entities.FacebookAccounts.FirstOrDefaultAsync(e => e.Nickname.CompareTo(proposal.Nickname) == 0);
+                            proposerAccount.Rank += 4;
                             await entities.SaveChangesAsync();
                             sendPushNotifications(searchToRemove, proposal);
                             alertOtherSearchers(extendedSearchList, proposal);

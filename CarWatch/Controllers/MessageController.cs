@@ -16,7 +16,6 @@ namespace CarWatch.Controllers
         private string k_TheServer = "TheServer";
         private string k_LicensePlateNotFound = "מספר הרישוי לא נמצא במערכת";
         private int k_AmountOfMessagesToUser = 30;
-        private int k_OfflineStatus = 0;
         private HttpClient client = new HttpClient();
 
         public MessageController()

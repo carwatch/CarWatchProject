@@ -119,6 +119,8 @@ namespace CarWatch.Controllers
                 }
                 i_ParkingSpotProposal.TimeOpened = DateTime.UtcNow;
                 entities.Proposals.Add(i_ParkingSpotProposal);
+                FacebookAccount proposerAccount = await entities.FacebookAccounts.FirstOrDefaultAsync(e => e.Nickname == nickname);
+                proposerAccount.Rank++;
                 await entities.SaveChangesAsync();
                 return Ok();
             }
@@ -138,6 +140,9 @@ namespace CarWatch.Controllers
 
                 }
                 entities.Proposals.Remove(result);
+                FacebookAccount proposerAccount = await entities.FacebookAccounts.FirstOrDefaultAsync(e => e.Nickname == nickname);
+                if(proposerAccount.Rank > 0)
+                    proposerAccount.Rank--;
                 await entities.SaveChangesAsync();
                 return Ok();
             }
@@ -170,25 +175,33 @@ namespace CarWatch.Controllers
 
                 if(i_Status.status == (int)e_ExchangeStatus.Success)
                 {
-                    pushToClient(result.ConsumerNickname, "exchageStatusUpdate", k_ExchangeSuccessMessage);
-                    pushToClient(result.ProviderNickname, "exchageStatusUpdate", k_ExchangeSuccessMessage);
+                    pushToClient(result.ConsumerNickname, "exchangeStatusUpdate", k_ExchangeSuccessMessage);
+                    pushToClient(result.ProviderNickname, "exchangeStatusUpdate", k_ExchangeSuccessMessage);
                     FacebookAccount proposer = await entities.FacebookAccounts.FirstOrDefaultAsync(e => e.Nickname == result.ProviderNickname);
-                    proposer.Rank++;
+                    proposer.Rank += 5;
                 }
                 else if (i_Status.status == (int)e_ExchangeStatus.CanceledBySearcherPriorArrival)
                 {
-                    pushToClient(result.ConsumerNickname, "exchageStatusUpdate", k_ExchangeCancelBySearcherMessage);
-                    pushToClient(result.ProviderNickname, "exchageStatusUpdate", k_ExchangeCancelBySearcherMessage);
+                    pushToClient(result.ConsumerNickname, "exchangeStatusUpdate", k_ExchangeCancelBySearcherMessage);
+                    pushToClient(result.ProviderNickname, "exchangeStatusUpdate", k_ExchangeCancelBySearcherMessage);
                 }
                 else if (i_Status.status == (int)e_ExchangeStatus.CanceledByProposerPriorArrival)
                 {
-                    pushToClient(result.ConsumerNickname, "exchageStatusUpdate", k_ExchangeCancelByProposerMessage);
-                    pushToClient(result.ProviderNickname, "exchageStatusUpdate", k_ExchangeCancelByProposerMessage);
+                    pushToClient(result.ConsumerNickname, "exchangeStatusUpdate", k_ExchangeCancelByProposerMessage);
+                    pushToClient(result.ProviderNickname, "exchangeStatusUpdate", k_ExchangeCancelByProposerMessage);
+                    FacebookAccount proposerAccount = await entities.FacebookAccounts.FirstOrDefaultAsync(e => e.Nickname == result.ProviderNickname);
+                    proposerAccount.Rank -= 2;
+                    if (proposerAccount.Rank < 0)
+                        proposerAccount.Rank = 0;
                 }
                 else if(i_Status.status == (int)e_ExchangeStatus.CancelNoParkingSpot)
                 {
-                    pushToClient(result.ConsumerNickname, "exchageStatusUpdate", k_ExchangeCancelNoParkingSpotMessage);
-                    pushToClient(result.ProviderNickname, "exchageStatusUpdate", k_ExchangeCancelNoParkingSpotMessage);
+                    pushToClient(result.ConsumerNickname, "exchangeStatusUpdate", k_ExchangeCancelNoParkingSpotMessage);
+                    pushToClient(result.ProviderNickname, "exchangeStatusUpdate", k_ExchangeCancelNoParkingSpotMessage);
+                    FacebookAccount proposerAccount = await entities.FacebookAccounts.FirstOrDefaultAsync(e => e.Nickname == result.ProviderNickname);
+                    proposerAccount.Rank -= 3;
+                    if (proposerAccount.Rank < 0)
+                        proposerAccount.Rank = 0;
                 }
                 else
                 {
@@ -251,13 +264,6 @@ namespace CarWatch.Controllers
             }
         }
 
-        private async void pushToClient(string i_Nickname, string i_MethodName, string i_Message)
-        {
-            TodoItem todoItem = new TodoItem();
-            todoItem.Text = k_TheServer + ";" + i_Nickname + ";" + i_MethodName + ";" + i_Message;
-            var response = await client.PostAsJsonAsync("tables/TodoItem/PostTodoItem?ZUMO-API-VERSION=2.0.0", todoItem);
-        }
-
         [BasicAuthentication]
         [HttpPost]
         public async Task<IHttpActionResult> SendProximityAlert(Object obj)
@@ -274,6 +280,14 @@ namespace CarWatch.Controllers
                 pushToClient(result.ProviderNickname, "sendExchangeAlert", k_MessageToProposer);
                 return Ok();
             }
+        }
+
+
+        private async void pushToClient(string i_Nickname, string i_MethodName, string i_Message)
+        {
+            TodoItem todoItem = new TodoItem();
+            todoItem.Text = k_TheServer + ";" + i_Nickname + ";" + i_MethodName + ";" + i_Message;
+            var response = await client.PostAsJsonAsync("tables/TodoItem/PostTodoItem?ZUMO-API-VERSION=2.0.0", todoItem);
         }
     }
 }
