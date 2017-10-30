@@ -13,7 +13,7 @@ namespace CarWatch.Controllers
 {
     public class MessageController : ApiController
     {
-        private string k_TheServer = "TheServer";
+        private string k_TheServer = "";
         private string k_LicensePlateNotFound = "מספר הרישוי לא נמצא במערכת";
         private int k_AmountOfMessagesToUser = 30;
         private HttpClient client = new HttpClient();

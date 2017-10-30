@@ -11,7 +11,7 @@ namespace CarWatch.Controllers
 {
     public class ExchangeController : ApiController
     {
-        private string k_TheServer = "TheServer";
+        private string k_TheServer = "";
         private string k_MessageToProposer = "בדקה הקרובה יגיע הנהג";
         private string k_MessageToSearcher = "בדקה הקרובה תגיעו לחניה";
         private string k_ExchangeSuccessMessage = "החלפת החניה בוצעה בהצלחה";

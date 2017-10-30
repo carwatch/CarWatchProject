@@ -11,11 +11,11 @@ namespace CarWatch
 {
     public class MatchMaker
     {
-        private string k_TheServer = "TheServer";
+        private string k_TheServer = "";
         private string k_ProposerMessage = "נמצא מחפש חניה!";
         private string k_SearcherMessage = "נמצאה חניה!";
         private string k_ParkingSpotTakenMessage = "חניה נתפסה בכתובת ";
-        private string k_RankMessage = "ומיקומך בתור הוא ";
+        private string k_RankMessage = " ומיקומך בתור הוא ";
         private int k_EarthRadius = 6371;
         private HttpClient client = new HttpClient();
 
